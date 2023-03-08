@@ -4,7 +4,7 @@ import { createTransport } from "nodemailer";
 const sendEmail = (message) => {
     return new Promise((resolve, reject) => {
       const transporter = createTransport({
-        service: process.env.SERVICE,
+        service: "gmail",
 		    host: "smtp.gmail.com",
         auth: {
 			user: "klajdixhafkollari36@gmail.com",
