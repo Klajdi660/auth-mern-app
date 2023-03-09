@@ -12,18 +12,14 @@ router.post("/", async (req, res) => {
 	try {
 		connection.query('SELECT * from register WHERE email = ?', [email], async (err, results) => {
 			const { error } = userModel.validate(req.body);
-            console.log('results :>> ', results);
+            
             if (error) {
 			    res.status(400).send({ message: error.details[0].message });
 		    } else {
 				if (results.length > 0) {
-                    // return res.json({
-                    //     status: 409,
-                    //     message: "User already exist"
-                    // })
 					return res.status(400).send({ message: "User already exist"});
-				}
-            }
+				} 
+            } 
         
 			let hashPassword = await bcrypt.hash(password, 8);
 
