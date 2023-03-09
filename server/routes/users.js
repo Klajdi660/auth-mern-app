@@ -6,58 +6,13 @@ import sendConfirmationEmail from "../utils/sendEmail.js";
 
 const router = express.Router();
 
-// router.post("/", async (req, res) => {
-// 	const { firstName, lastName, email, password } = req.body;
-// 	try {
-// 		const { error } = userModel.validate(req.body);
-
-// 		if (error) {
-// 			res.status(400).send({ message: error.details[0].message });
-// 		} 
-		
-// 		connection.query("SELECT * FROM register WHERE email = ?", [email], (error, results) => {
-// 			if (error) {
-//                 console.log(error);
-//             } else {
-// 				if (results.length > 0) {
-//                 res.json({
-//                     status: 409,
-//                     message: "User already exist"
-//                 })
-// 			}}
-// 		});
-        
-// 	    const salt = await bcrypt.genSalt(10);
-// 		const hashPassword = await bcrypt.hash(password, salt);
-
-// 		connection.query("INSERT INTO register SET ?", {
-// 			...req.body,
-// 			password: hashPassword,
-// 		}, async (error, results) => {
-// 			if (error) {
-// 				console.log(error);
-// 			} 
-
-// 			const url = `http://localhost:3000/users/${results.insertId}/verify`;
-// 			await sendConfirmationEmail({ username: `${firstName} ${lastName}`, text: url });
-// 		});
-
-// 		res
-// 			.status(201)
-// 			.send({ message: "An Email sent to your account please verify" });
-// 	} catch (error) {
-// 		console.log(error);
-// 		res.status(500).send({ message: "Internal Server Error" });
-// 	}
-// });
-
 router.post("/", async (req, res) => {
 	const { firstName, lastName, email, password } = req.body;
 
 	try {
 		connection.query('SELECT * from register WHERE email = ?', [email], async (err, results) => {
 			const { error } = userModel.validate(req.body);
-
+            console.log('results :>> ', results);
             if (error) {
 			    res.status(400).send({ message: error.details[0].message });
 		    } else {

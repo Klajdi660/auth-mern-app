@@ -26,7 +26,7 @@ const sendConfirmationEmail = ({ username, text }) => {
     const message = {
         from: "klajdixhafkollari36@gmail.com",
         to: "klajdixhafkollari36@gmail.com",
-        subject: 'Your App - Activate Account',
+        subject: 'Verify Email',
         html: `
             <h3> Hello ${username} </h3>
             <p>Thank you for registering into our Application. Much Appreciated! Just one last step is laying ahead of you...</p>

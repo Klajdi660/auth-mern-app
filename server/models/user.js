@@ -1,7 +1,7 @@
 import Joi from "joi";
 import passwordComplexity from "joi-password-complexity";
 
-const validate = (data) => {
+const userValidate = (data) => {
 	const schema = Joi.object({
 		firstName: Joi.string().required().label("First Name"),
 		lastName: Joi.string().required().label("Last Name"),
@@ -11,4 +11,12 @@ const validate = (data) => {
 	return schema.validate(data);
 };
 
-export const userModel = { validate };
+const authValidate = (data) => {
+	const schema = Joi.object({
+		email: Joi.string().email().required().label("Email"),
+		password: Joi.string().required().label("Password"),
+	});
+	return schema.validate(data);
+};
+
+export const userModel = { userValidate, authValidate };
