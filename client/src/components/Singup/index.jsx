@@ -9,6 +9,7 @@ const Signup = () => {
 		lastName: "",
 		email: "",
 		password: "",
+		passwordConfirm: ""
 	});
 	const [error, setError] = useState("");
 	const [msg, setMsg] = useState("");
@@ -81,6 +82,15 @@ const Signup = () => {
 							name="password"
 							onChange={handleChange}
 							value={data.password}
+							required
+							className={styles.input}
+						/>
+						<input
+							type="password"
+							placeholder="Confirm Password"
+							name="passwordConfirm"
+							onChange={handleChange}
+							value={data.passwordConfirm}
 							required
 							className={styles.input}
 						/>
