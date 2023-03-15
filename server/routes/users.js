@@ -10,7 +10,7 @@ router.post("/", async (req, res) => {
 	const { firstName, lastName, email, password } = req.body;
 
 	try {
-		connection.query('SELECT * from register WHERE email = ?', [email], async (err, results) => {
+		connection.query('SELECT * FROM register WHERE email = ?', [email], async (err, results) => {
 			const { error } = userModel.userValidate(req.body);
             
             if (error) {
@@ -18,7 +18,7 @@ router.post("/", async (req, res) => {
 		    } else {
 				if (results.length > 0) {
 					return res.status(400).send({ message: "User already exist"});
-				} 
+				}  
             } 
         
 			let hashPassword = await bcrypt.hash(password, 8);
@@ -30,7 +30,7 @@ router.post("/", async (req, res) => {
 			    if (error) {
 				    console.log(error);
 			    } 
-			
+		
 				const url = `http://localhost:3000/users/${results.insertId}/verify`;
 				await sendConfirmationEmail({ username: `${firstName} ${lastName}`, text: url });
 		    });

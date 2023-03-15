@@ -8,7 +8,7 @@ const router = express.Router();
 
 router.post("/", async (req, res) => {
 	const { email, password } = req.body;
-
+    
 	try {
 		const { error } = userModel.authValidate(req.body);
 
@@ -17,7 +17,7 @@ router.post("/", async (req, res) => {
 
         connection.query('SELECT * FROM register WHERE email = ?', [email], async (err, results) => {
 			const user = results[0];
-            
+			
 			if (!user)
 				return res.status(401).send({ message: "Invalid Email or Password" });
 
