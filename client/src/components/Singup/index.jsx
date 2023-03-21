@@ -4,13 +4,7 @@ import { Link } from "react-router-dom";
 import styles from "./styles.module.css";
 
 const Signup = () => {
-	const [data, setData] = useState({
-		firstName: "",
-		lastName: "",
-		email: "",
-		password: "",
-		passwordConfirm: ""
-	});
+	const [data, setData] = useState({ firstName: "", lastName: "", email: "", password: "", passwordConfirm: "" });
 	const [error, setError] = useState("");
 	const [msg, setMsg] = useState("");
 

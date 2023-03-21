@@ -8,7 +8,7 @@ const router = express.Router();
 
 router.post("/", async (req, res) => {
 	const { firstName, lastName, email, password, passwordConfirm } = req.body;
-
+    
 	try {
 		const { error } = userModel.userValidate(req.body);
 
