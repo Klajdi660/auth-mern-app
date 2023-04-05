@@ -57,7 +57,7 @@ router.post("/", async (req, res) => {
 
 router.get("/:id/verify", async (req, res) => {
 	const { id } = req.params;
-    console.log('id :>> ', id);
+    
 	connection.query(`SELECT * FROM register WHERE id = ?`, [id], (error, results) => {
 		if (error) {
 			console.error(err);
