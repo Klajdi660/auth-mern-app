@@ -11,20 +11,21 @@ router.post("/", async (req, res) => {
     
 	try {
 		const { error } = userModel.userValidate(req.body);
+        
+		if (error) {
+		    return res.status(400).send({ error: true, message: error.details[0].message });
+	    }
 
-		if (error) 
-		    return res.status(400).send({ message: error.details[0].message });
-			
 		connection.query('SELECT * FROM register WHERE email = ?', [email], async (err, results) => {
 			// const { error } = userModel.userValidate(req.body);
             
             // if (error) {
-			//     res.status(400).send({ message: error.details[0].message });
+			//     res.status(400).send({ error: true, message: error.details[0].message });
 		    // } else {
 				if (results.length > 0) {
-					return res.status(400).send({ message: "User already exist"});
+					return res.status(400).send({ error: true, message: "User already exist"});
 				} else if (password !== passwordConfirm) {
-					return res.status(400).send({ message: "Password dont match"})
+					return res.status(400).send({ error: true, message: "Password don't match"})
 				}
             // } 
         
@@ -38,7 +39,7 @@ router.post("/", async (req, res) => {
 			    password: hashPassword,
 		    }, async (error, results) => {
 			    if (error) {
-				    console.log(error);
+				    console.error(error);
 			    } 
 		
 				const url = `http://localhost:3000/users/${results.insertId}/verify`;
@@ -47,11 +48,11 @@ router.post("/", async (req, res) => {
 
 		    res
 			    .status(201)
-			    .send({ message: "An Email sent to your account please verify" });
+			    .send({ error: false, message: "An Email sent to your account please verify" });
 		});
 	} catch (error) {
-		console.log(error);
-		res.status(500).send({ message: "Internal Server Error" });
+		console.error(error);
+		res.status(500).send({ error: true, message: "Internal Server Error" });
 	}
 });
 
@@ -60,24 +61,24 @@ router.get("/:id/verify", async (req, res) => {
     
 	connection.query(`SELECT * FROM register WHERE id = ?`, [id], (error, results) => {
 		if (error) {
-			console.error(err);
-		    return res.status(500).send({ message: "Internal Server Error" });
+			console.error(error);
+		    return res.status(500).send({ error: true, message: "Internal Server Error" });
 		}
 
 		const user = results[0];
 
 		if (!user) {
-			return res.status(400).send({ message: "Invalid link" });
+			return res.status(400).send({ error: true, message: "Invalid link" });
 		}
 
 		connection.query(
             `UPDATE register SET verified = true WHERE id = ?`, [id], (err, results) => {
               if (err) {
                 console.error(err);
-                return res.status(500).send({ message: "Internal Server Error" });
+                return res.status(500).send({ error: true, message: "Internal Server Error" });
               }
 
-              res.status(200).send({ message: "Email verified successfully" });
+              res.status(200).send({ error: false, message: "Email verified successfully" });
             }
         );
 	});

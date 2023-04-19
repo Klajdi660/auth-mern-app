@@ -11,23 +11,26 @@ router.post("/", async (req, res) => {
     
 	try {
 		const { error } = userModel.authValidate(req.body);
-
-		if (error)
-			return res.status(400).send({ message: error.details[0].message });
+    
+		if (error) {
+			return res.status(400).send({ error: true, message: error.details[0].message });
+		}
 
         connection.query('SELECT * FROM register WHERE email = ?', [email], async (err, results) => {
 			const user = results[0];
 			
-			if (!user)
-				return res.status(401).send({ message: "Invalid Email or Password" });
+			if (!user) {
+				return res.status(401).send({ error: true, message: "Invalid Email or Password" });
+		    }
 
 			const validPassword = await bcrypt.compare(
 			    password,
 			    user.password
 		    );
             
-			if (!validPassword)
-			    return res.status(401).send({ message: "Invalid Email or Password" });
+			if (!validPassword) {
+			    return res.status(401).send({error: true, message: "Invalid Email or Password" });
+			}
 
 			if (!user.verified) {
 			    const url = `http://localhost:3000/users/${user.id}/verify`;
@@ -35,13 +38,13 @@ router.post("/", async (req, res) => {
 	
 			    return res
 				    .status(400)
-				    .send({ message: "An Email sent to your account please verify" });
+				    .send({ error: false, message: "An Email sent to your account please verify" });
 		    }
 
-			res.status(200).send({ message: "logged in successfully" });
+			res.status(200).send({ error: false, message: "logged in successfully" });
 		});
 	} catch (error) {
-		res.status(500).send({ message: "Internal Server Error" });
+		res.status(500).send({ error: true, message: "Internal Server Error" });
 	}
 });
 

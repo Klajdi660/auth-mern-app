@@ -7,6 +7,6 @@ const connection = mysql.createConnection({
     database: "node-reg",
 	waitForConnections: true,
     connectionLimit: 10,
-})
+});
 
 export default connection;
