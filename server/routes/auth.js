@@ -20,7 +20,7 @@ router.post("/", async (req, res) => {
 			const user = results[0];
 			
 			if (!user) {
-				return res.status(401).send({ error: true, message: "Invalid Email or Password" });
+				return res.status(401).send({ error: true, message: "Invalid Email or Password!" });
 		    }
 
 			const validPassword = await bcrypt.compare(
@@ -29,7 +29,7 @@ router.post("/", async (req, res) => {
 		    );
             
 			if (!validPassword) {
-			    return res.status(401).send({error: true, message: "Invalid Email or Password" });
+				return res.status(401).send({error: true, message: "Invalid Email or Password!" });
 			}
 
 			if (!user.verified) {
@@ -41,7 +41,10 @@ router.post("/", async (req, res) => {
 				    .send({ error: false, message: "An Email sent to your account please verify" });
 		    }
 
-			res.status(200).send({ error: false, message: "logged in successfully" });
+			// res.status(200).send({ error: false, message: "logged in successfully" });
+			setTimeout(() => {
+				return res.status(200).send({ error: false, message: "logged in successfully" });
+			}, 1000);
 		});
 	} catch (error) {
 		res.status(500).send({ error: true, message: "Internal Server Error" });

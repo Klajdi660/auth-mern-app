@@ -3,6 +3,7 @@ import Main from "./components/Main";
 import Signup from "./components/Singup";
 import Login from "./components/Login";
 import EmailVerify from "./components/EmailVerify";
+import ForgotPassword from "./components/ForgotPassword";
 
 const App = () => {
 	const user = localStorage.getItem("token");
@@ -11,6 +12,7 @@ const App = () => {
 		<Routes>
 			{ user && <Route path="/" exact element={<Main />} /> } 
 			<Route path="/signup" exact element={<Signup />} />
+			<Route path="/forgotPassword" exact element={<ForgotPassword/>}/>
 			<Route path="/login" exact element={<Login />} />
 			<Route path="/" element={<Navigate replace to="/login" />} />
 			<Route path="/users/:id/verify" element={<EmailVerify />} />

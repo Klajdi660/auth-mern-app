@@ -1,19 +1,17 @@
-import { useState, useEffect } from "react";
+import { useState } from "react";
 import axios from "axios";
 import { Link } from "react-router-dom";
 import styles from "./styles.module.css";
-import { Button, Checkbox, Form, Input } from 'antd';
-import { LockOutlined, UserOutlined, LoginOutlined } from '@ant-design/icons';
+import { Button, Form, Input } from 'antd';
+import { LockOutlined, UserOutlined, UploadOutlined } from '@ant-design/icons';
 
-const Login = () => {
+const ForgotPassword = () => {
 	const inputs = {
-		email: "",
-		password: "",
+		newPassword: "",
+        confirmNewPassword: ""
 	};
 	const [data, setData] = useState(inputs);
 	const [error, setError] = useState("");
-	const [form] = Form.useForm();
-    const [, setForceUpdate] = useState({});
 	const [isLoginRequest, setIsLoginRequest] = useState([]);
 
 	const handleLoginRequest = (index) => {
@@ -58,27 +56,21 @@ const Login = () => {
 		}
 	};
 
-	// To disable submit button at the beginning.
-	useEffect(() => {
-		setForceUpdate({});
-	}, []);
-
 	return (
 		<div className={styles.login_container}>
 			<div className={styles.login_form_container}>
 				<div className={styles.left}>
 					<Form 
-					    form={form} 
 						className={styles.form_container} 
 						onFinish={handleSubmit}
 					>
-						<h1>Login to Your Account</h1>
+						<h1>Update Password</h1>
 						<Form.Item
-							name="email"
-							rules={[{ required: true, message: 'Please input your email!' }]}
+							name="newPassword"
+							rules={[{ required: true, message: 'Please input your new password!' }]}
 						>
 							<Input 
-							    placeholder="Email"
+							    placeholder="New Password"
 							    className={styles.input}
 								onChange={handleChange}
 								value={data.email}
@@ -87,7 +79,7 @@ const Login = () => {
 							/>
     					</Form.Item>
 						<Form.Item
-							name="password"
+							name="confirmNewPassword"
 							rules={[{ required: true, message: 'Please input your password!' }]}
 						>
 						    <Input.Password
@@ -101,35 +93,18 @@ const Login = () => {
 							/>
 						</Form.Item>
 						{error && <div className={styles.error_msg}>{error}</div>}
-						<Form.Item className={styles.remb_forg}>
-							<Form.Item name="remember" valuePropName="checked" noStyle>
-								<Checkbox>Remember me</Checkbox>
-							</Form.Item>
-							<Link to="/forgotPassword" className={styles.forgot}> 
-								Forgot password
-							</Link>
-						</Form.Item>
 						<Form.Item shouldUpdate className={styles.buttons}>
 							{() => (
-								<>
-								    <Button
-										className={styles.green_btn}
-										type="primary"
-										htmlType="submit"
-										disabled={
-											!form.isFieldsTouched(true) ||
-											!!form.getFieldsError().filter(({ errors }) => errors.length).length
-										}
-										icon={<LoginOutlined/>}
-										loading={isLoginRequest[1]}
-										onClick={() => handleLoginRequest(1)}
-									>
-										Sign in
-									</Button>
-									<div className={styles.reg_link}>
-										Or &nbsp;&nbsp;<Link to="/signup">register now!</Link>
-									</div>
-								</>
+                                <Button
+                                    className={styles.green_btn}
+                                    type="primary"
+                                    htmlType="submit"
+                                    icon={<UploadOutlined/>}
+                                    loading={isLoginRequest[1]}
+                                    onClick={() => handleLoginRequest(1)}
+                                >
+                                    Update Password
+                                </Button>
 							)}
                         </Form.Item>
 					</Form>
@@ -139,4 +114,4 @@ const Login = () => {
 	);
 };
 
-export default Login;
+export default ForgotPassword;
