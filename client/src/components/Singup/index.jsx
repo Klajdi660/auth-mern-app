@@ -2,8 +2,22 @@ import { useState } from "react";
 import axios from "axios";
 import { Link } from "react-router-dom";
 import styles from "./styles.module.css";
-import { Formik, Form, Field } from "formik";
+// import { Formik, Form, Field } from "formik";
 import validationSchema from "./validation.jsx";
+
+import {
+  AutoComplete,
+  Button,
+  Cascader,
+  Checkbox,
+  Col,
+  Form,
+  Input,
+  InputNumber,
+  Row,
+  Select,
+} from 'antd';
+import { LoginOutlined, UserOutlined, MailOutlined, LockOutlined } from '@ant-design/icons';
 
 const Signup = () => {
   const inputs = {
@@ -17,6 +31,7 @@ const Signup = () => {
   const [data, setData] = useState(inputs);
   const [error, setError] = useState("");
   const [msg, setMsg] = useState("");
+  const [form] = Form.useForm();
 
   const handleChange = ({ currentTarget: input }) => {
     setData({ ...data, [input.name]: input.value });
@@ -49,6 +64,19 @@ const Signup = () => {
       }
     }
   };
+
+  const tailFormItemLayout = {
+    wrapperCol: {
+      xs: {
+        span: 24,
+        offset: 0,
+      },
+      sm: {
+        // span: 16,
+        // offset: 8,
+      },
+    },
+  };
  
   return (
     <div className={styles.signup_container}>
@@ -62,7 +90,7 @@ const Signup = () => {
           </Link>
         </div> */}
         <div className={styles.right}>
-          <Formik
+          {/* <Formik
             initialValues={data}
             validationSchema={validationSchema}
             // onSubmit={handleSubmit}
@@ -121,7 +149,136 @@ const Signup = () => {
                 )}
               </Form>
             )}
-          </Formik>
+          </Formik> */}
+          <Form
+            form={form}
+            name="register"
+            onFinish={""}
+            // scrollToFirstError
+            className={styles.form_container}
+          >
+            <h1>Create Account</h1>
+            <Form.Item
+              name="firstName"
+              rules={[{
+                required: true,
+                message: 'Please input your First name',
+              }]}
+            >
+              <Input
+                name="firstName"
+                placeholder="First Name"
+                prefix={<UserOutlined/>}
+                className={styles.input}
+              />
+            </Form.Item>
+            <Form.Item
+              name="lastName"
+              rules={[{
+                required: true,
+                message: 'Please input your Last name',
+              }]}
+            >
+              <Input
+                name="lastName"
+                placeholder="Last Name"
+                prefix={<UserOutlined/>}
+                className={styles.input}
+              />
+            </Form.Item>
+            <Form.Item
+              name="email"
+              rules={[
+                {
+                  type: 'email',
+                  message: 'The input is not valid E-mail!',
+                },
+                {
+                  required: true,
+                  message: 'Please input your E-mail!',
+                },
+              ]}
+            >
+              <Input 
+                name="email"
+                placeholder="Email"
+                prefix={<MailOutlined/>}
+                className={styles.input}
+              />
+            </Form.Item>
+            <Form.Item
+              name="password"
+              rules={[
+                {
+                  required: true,
+                  message: 'Please input your password!',
+                },
+              ]}
+              hasFeedback
+            >
+              <Input.Password 
+                name="password"
+                placeholder="Password"
+                prefix={<LockOutlined/>}
+                className={styles.input}
+              />
+            </Form.Item>
+            <Form.Item
+              name="confirmPassword"
+              dependencies={['password']}
+              hasFeedback
+              rules={[
+                {
+                  required: true,
+                  message: 'Please confirm your password!',
+                },
+                ({ getFieldValue }) => ({
+                  validator(_, value) {
+                    if (!value || getFieldValue('password') === value) {
+                      return Promise.resolve();
+                    }
+                    return Promise.reject(new Error('The two passwords that you entered do not match!'));
+                  },
+                }),
+              ]}
+            >
+              <Input.Password 
+                name="confirmPassword"
+                placeholder="Confirm Password"
+                prefix={<LockOutlined/>}
+                className={styles.input}
+              />
+            </Form.Item>
+          </Form>
+          <Form.Item
+            name="agreement"
+            // valuePropName="checked"
+            rules={[
+              {
+                validator: (_, value) =>
+                  value ? Promise.resolve() : Promise.reject(new Error('Should accept agreement')),
+              },
+            ]}
+            {...tailFormItemLayout}
+          >
+            <Checkbox>
+              I have read the <a href="">agreement</a>
+            </Checkbox>
+          </Form.Item>
+          <Button 
+            type="primary"
+            htmlType="submit" 
+            icon={<LoginOutlined />}
+            className={styles.green_btn}
+          >
+            Sign Up
+          </Button>
+          {msg && (
+            <div className={styles.success_msg}>{msg}</div>
+          )}
+          {error && (
+            <div className={styles.error_msg}>{error}</div>
+          )}
         </div>
       </div>
     </div>

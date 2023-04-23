@@ -93,7 +93,6 @@ const Login = () => {
 						    <Input.Password
 							    placeholder="Password"
 								onChange={handleChange}
-								styles={{ background: "#edf5f3" }}
 							    className={styles.input}
 								value={data.password}
 								name="password"
