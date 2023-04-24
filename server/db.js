@@ -8,6 +8,5 @@ const connection = mysql.createConnection({
 	// waitForConnections: true,
     // connectionLimit: 10,
 });
-console.log("con", connection)
 
 export default connection;

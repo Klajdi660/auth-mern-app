@@ -62,11 +62,11 @@
 	width: 150px;
 }
 
-.buttons {
+/* .buttons {
 	display: flex;
 	justify-content: center;
 	align-items: center;
-}
+} */
 
 .reg_link {
 	display: flex;
