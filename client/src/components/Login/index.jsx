@@ -53,11 +53,11 @@ const Login = () => {
 				// Clear error after 5 seconds
 				setTimeout(() => {
 					setError("");
-				}, 2000);
+				}, 3000);
 			}
 		}
 	};
-
+    
 	// To disable submit button at the beginning.
 	useEffect(() => {
 		setForceUpdate({});

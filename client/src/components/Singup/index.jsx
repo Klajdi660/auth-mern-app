@@ -2,8 +2,6 @@ import { useState } from "react";
 import axios from "axios";
 import { Link } from "react-router-dom";
 import styles from "./styles.module.css";
-// import { Formik, Form, Field } from "formik";
-// import validationSchema from "./validation.jsx";
 
 import {
   Button,
@@ -36,12 +34,12 @@ const Signup = () => {
       const url = "http://localhost:8080/api/users";
       const { data: res } = await axios.post(url, data);
       setMsg(res.message);
-      setData(inputs); // reset input fields to initial state
-    
+      // setData(inputs); // reset input fields to initial state
       // Clear message after 3 seconds
       setTimeout(() => {
         setMsg("");
-      }, 5000);
+        form.resetFields();
+      }, 3000);
     } catch (error) {
       if (
         error.response &&
@@ -53,7 +51,7 @@ const Signup = () => {
         // Clear error after 3 seconds
         setTimeout(() => {
           setError("");
-        }, 5000);
+        }, 3000);
       }
     }
   };
@@ -63,11 +61,7 @@ const Signup = () => {
       xs: {
         span: 24,
         offset: 0,
-      },
-      sm: {
-        // span: 16,
-        // offset: 8,
-      },
+      }
     },
   };
  
@@ -143,7 +137,7 @@ const Signup = () => {
                   message: 'Please input your password!',
                 },
               ]}
-              hasFeedback
+              // hasFeedback
             >
               <Input.Password 
                 name="password"
@@ -157,7 +151,7 @@ const Signup = () => {
             <Form.Item
               name="confirmPassword"
               dependencies={['password']}
-              hasFeedback
+              // hasFeedback
               rules={[
                 {
                   required: true,
@@ -194,7 +188,7 @@ const Signup = () => {
               {...tailFormItemLayout}
             >
               <Checkbox>
-                I have read the <a href="/" >agreement</a>
+                I accept the <Link to="#">Terms and Conditions</Link>
               </Checkbox>
             </Form.Item>
             {msg && (

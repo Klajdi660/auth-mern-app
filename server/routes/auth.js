@@ -1,6 +1,6 @@
 import express from "express";
 import bcrypt from "bcrypt";
-import sendEmail from "../utils/sendEmail.js";
+import sendConfirmationEmail from "../utils/sendEmail.js";
 import connection from "../db.js";
 import { userModel } from "../models/user.js";
 
@@ -34,16 +34,15 @@ router.post("/", async (req, res) => {
 
 			if (!user.verified) {
 			    const url = `http://localhost:3000/users/${user.id}/verify`;
-			    await sendEmail(user.email, url);
+			    await sendConfirmationEmail({ username: user.email, text: url });
 	
-			    return res
-				    .status(400)
-				    .send({ error: false, message: "An Email sent to your account please verify" });
+				return res.status(401).send({ error: true, message: "Email not verified. A verification email has been sent. Please check your inbox." });
+
 		    }
 
 			// res.status(200).send({ error: false, message: "logged in successfully" });
 			setTimeout(() => {
-				return res.status(200).send({ error: false, message: "logged in successfully" });
+				return res.status(200).send({ error: false, message: "Logged in successfully" });
 			}, 1000);
 		});
 	} catch (error) {
