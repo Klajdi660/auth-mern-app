@@ -70,11 +70,11 @@ const ForgotPassword = () => {
 							rules={[{ required: true, message: 'Please input your new password!' }]}
 						>
 							<Input 
-							    placeholder="New Password"
+							    placeholder="New password"
 							    className={styles.input}
 								onChange={handleChange}
 								value={data.email}
-								name="email"
+								name="newPassord"
 								prefix={<UserOutlined/>}
 							/>
     					</Form.Item>
@@ -83,12 +83,12 @@ const ForgotPassword = () => {
 							rules={[{ required: true, message: 'Please input your password!' }]}
 						>
 						    <Input.Password
-							    placeholder="Password"
+							    placeholder="Confirm new password"
 								onChange={handleChange}
 								styles={{ background: "#edf5f3" }}
 							    className={styles.input}
 								value={data.password}
-								name="password"
+								name="confirmNewPassword"
 								prefix={<LockOutlined/>}
 							/>
 						</Form.Item>
