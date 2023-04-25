@@ -22,7 +22,6 @@ const authValidate = (data) => {
 };
 
 const authForgotPassword = (data) => {
-	console.log(data)
 	const schema = Joi.object({
 		newPassword: passwordComplexity().required().label("New Password"),
 		confirmNewPassword: passwordComplexity().required().label("Confirm new Password"),

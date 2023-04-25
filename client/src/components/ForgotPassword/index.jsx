@@ -1,15 +1,11 @@
-import { useState, useEffect } from "react";
+import { useState } from "react";
 import axios from "axios";
-import { Link } from "react-router-dom";
 import styles from "./styles.module.css";
-import { Button, Checkbox, Form, Input } from 'antd';
-import { LockOutlined, UserOutlined, LoginOutlined } from '@ant-design/icons';
+import { Button, Form, Input } from 'antd';
+import { MailOutlined } from '@ant-design/icons';
 
-const Login = () => {
-	const inputs = {
-		email: "",
-		password: "",
-	};
+const ForgotPassword = () => {
+	const inputs = { email: "" };
 	const [data, setData] = useState(inputs);
 	const [error, setError] = useState("");
 	const [form] = Form.useForm();
@@ -20,7 +16,7 @@ const Login = () => {
 
 	const handleSubmit = async () => {
 		try {
-			const url = "http://localhost:8080/api/auth";
+			const url = "http://localhost:8080/api/auth/forgotPassword";
 			const { data: res } = await axios.post(url, data);
 			localStorage.setItem("token", res.data);
 			window.location = "/";
@@ -31,74 +27,49 @@ const Login = () => {
 				error.response.status <= 500
 			) {
 				setError(error.response.data.message);
-
+			
 				// Clear error after 5 seconds
 				setTimeout(() => {
+					form.resetFields();
 					setError("");
 				}, 3000);
 			}
 		}
 	};
 
-
 	return (
 		<div className={styles.login_container}>
 			<div className={styles.login_form_container}>
 				<div className={styles.left}>
 					<Form 
-					    form={form} 
 						className={styles.form_container} 
+						form={form}
 						onFinish={handleSubmit}
 					>
-						<h1>Welcome Back, Log In</h1>
+						<h1>Enter Your Email</h1>
 						<Form.Item
 							name="email"
 							rules={[{ required: true, message: 'Please input your email!' }]}
 						>
-							<Input 
+							<Input
 							    placeholder="Email"
 							    className={styles.input}
 								onChange={handleChange}
 								value={data.email}
 								name="email"
-								prefix={<UserOutlined/>}
+								prefix={<MailOutlined/>}
 							/>
     					</Form.Item>
-						<Form.Item
-							name="password"
-							rules={[{ required: true, message: 'Please input your password!' }]}
-						>
-						    <Input.Password
-							    placeholder="Password"
-								onChange={handleChange}
-							    className={styles.input}
-								value={data.password}
-								name="password"
-								prefix={<LockOutlined/>}
-							/>
-						</Form.Item>
 						{error && <div className={styles.error_msg}>{error}</div>}
-						<Form.Item className={styles.remb_forg}>
-							<Form.Item name="remember" valuePropName="checked" noStyle>
-								<Checkbox>Remember me</Checkbox> 
-							</Form.Item>
-							<Link to="/forgotPassword" className={styles.forgot}> 
-								Forgot password
-							</Link>
-						</Form.Item>
-						<div className={styles.buttons}>
+						<Form.Item className={styles.buttons}>
 							<Button
 								className={styles.green_btn}
 								type="primary"
 								htmlType="submit"
-								icon={<LoginOutlined/>}
 							>
-								Sign in
+								Send
 							</Button>
-							<div className={styles.reg_link}>
-								Don't have an Account?&nbsp;<Link to="/signup">Sign up!</Link>
-							</div>
-                        </div>
+                        </Form.Item>
 					</Form>
 				</div>
 			</div>
@@ -106,4 +77,4 @@ const Login = () => {
 	);
 };
 
-export default Login;
+export default ForgotPassword;

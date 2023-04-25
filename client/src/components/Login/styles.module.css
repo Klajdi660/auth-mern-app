@@ -12,8 +12,10 @@
 	height: 500px;
 	display: flex;
 	border-radius: 10px;
-	box-shadow: 0px 3px 3px -2px rgb(0 0 0 / 20%),
-		0px 3px 4px 0px rgb(0 0 0 / 14%), 0px 1px 8px 0px rgb(0 0 0 / 12%);
+	/* box-shadow: 0px 3px 3px -2px rgb(0 0 0 / 20%),
+		0px 3px 4px 0px rgb(0 0 0 / 14%), 0px 1px 8px 0px rgb(0 0 0 / 12%); */
+		box-shadow: 0 0 15px -10px #2d3748;
+
 }
 
 .left {
@@ -34,8 +36,10 @@
 }
 
 .form_container h1 {
-	font-size: 40px;
+	/* font-size: 40px; */
 	margin-top: 0;
+	font-size: 34px;
+    color: #2a4365;
 }
 
 .input {
@@ -62,21 +66,23 @@
 	width: 150px;
 }
 
-/* .buttons {
+.buttons {
 	display: flex;
+	flex-direction: column;
 	justify-content: center;
 	align-items: center;
-} */
+}
 
 .reg_link {
-	display: flex;
+	/* display: flex;
 	align-items: center;
-	justify-content: center;
-	margin-top: 5px;
+	justify-content: center; */
+	margin-top: 8px;
 }
 
 .remb_forg {
-	width: 370px;
+	/* width: 370px; */
+	width: 360px;
 }
 
 .forgot {
