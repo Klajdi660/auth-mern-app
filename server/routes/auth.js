@@ -1,11 +1,13 @@
 import express from "express";
 import bcrypt from "bcrypt";
+import jwt from 'jsonwebtoken';
+import config from "config";
 import sendConfirmationEmail from "../utils/sendEmail.js";
 import connection from "../db.js";
 import { userModel } from "../models/user.js";
-import jwt from 'jsonwebtoken';
 
-const JWT_SECRET = "Klajd96@";
+// const JWT_SECRET = "Klajd96@";
+const JWT_SECRET = config.get("token");
 
 const router = express.Router();
 
@@ -54,6 +56,7 @@ router.post("/", async (req, res) => {
 		res.status(500).send({ error: true, message: "Internal Server Error" });
 	}
 });
+
 router.post('/forgotPassword', async (req, res) => {
 	const { email } = req.body;
 
