@@ -1,4 +1,4 @@
-import { useState, useEffect } from "react";
+import { useState } from "react";
 import axios from "axios";
 import { Link } from "react-router-dom";
 import styles from "./styles.module.css";
@@ -21,8 +21,9 @@ const Login = () => {
 	const handleSubmit = async () => {
 		try {
 			const url = "http://localhost:8080/api/auth";
-			const { data: res } = await axios.post(url, data);
-			localStorage.setItem("token", res.data);
+			const res = await axios.post(url, data);
+			const { loginToken } = res.data;
+			localStorage.setItem("userDataToken", loginToken);
 			window.location = "/";
 		} catch (error) {
 			if (

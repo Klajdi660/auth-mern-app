@@ -16,7 +16,7 @@ const ForgotPassword = () => {
 
 	const handleSubmit = async () => {
 		try {
-			const url = "http://localhost:8080/api/auth/forgotPassword";
+			const url = "http://localhost:8080/api/auth/sendPasswordLink";
 			const { data: res } = await axios.post(url, data);
 			localStorage.setItem("token", res.data);
 			window.location = "/";

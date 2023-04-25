@@ -42,7 +42,8 @@ router.post("/", async (req, res) => {
 			    } 
 		
 				const url = `http://localhost:3000/users/${results.insertId}/verify`;
-				await sendConfirmationEmail({ username: `${firstName} ${lastName}`, text: url });
+				const subject = "Verify email";
+				await sendConfirmationEmail({ username: `${firstName} ${lastName}`, subject: subject, link: url });
 		    });
 
 		    res
@@ -84,65 +85,3 @@ router.get("/:id/verify", async (req, res) => {
 });
 
 export default router;
-
-
-// const jwt = require('jsonwebtoken');
-// const nodemailer = require('nodemailer');
-// const transporter = nodemailer.createTransport({
-//     // configure your email transporter here
-// });
-
-// Assuming you have a MySQL model called `userdb` for handling users
-
-// router.post("/sendpasswordlink", (req, res) => {
-//     const { email } = req.body;
-
-//     if (!email) {
-//         res.status(401).json({ status: 401, message: "Enter Your Email" });
-//         return;
-//     }
-
-//     db.query("SELECT * FROM userdb WHERE email=?", [email], async (error, results) => {
-//         if (error) {
-//             res.status(500).json({ status: 500, message: "Internal Server Error" });
-//             return;
-//         }
-
-//         if (results.length === 0) {
-//             res.status(401).json({ status: 401, message: "invalid user" });
-//             return;
-//         }
-
-//         const userfind = results[0];
-
-//         // token generate for reset password
-//         const token = jwt.sign({ _id: userfind._id }, keysecret, {
-//             expiresIn: "120s"
-//         });
-
-//         db.query("UPDATE userdb SET verifytoken=? WHERE _id=?", [token, userfind._id], (error) => {
-//             if (error) {
-//                 res.status(500).json({ status: 500, message: "Internal Server Error" });
-//                 return;
-//             }
-
-//             const mailOptions = {
-//                 from: process.env.EMAIL,
-//                 to: email,
-//                 subject: "Sending Email For password Reset",
-//                 text: `This Link Valid For 2 MINUTES http://localhost:3001/forgotpassword/${userfind.id}/${token}`
-//             }
-
-//             transporter.sendMail(mailOptions, (error, info) => {
-//                 if (error) {
-//                     console.log("error", error);
-//                     res.status(401).json({ status: 401, message: "email not send" })
-//                 } else {
-//                     console.log("Email sent", info.response);
-//                     res.status(201).json({ status: 201, message: "Email sent Successfully" })
-//                 }
-//             });
-//         });
-//     });
-// });
-

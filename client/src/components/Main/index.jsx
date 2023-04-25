@@ -34,6 +34,9 @@ const Main = () => {
 								Logout
 							</button>
 						</nav>
+						<div className={styles.content}>
+							Welcome HP Cloud User
+						</div>
 					</div>
 				: 
 				<Space className={styles.loading}>   

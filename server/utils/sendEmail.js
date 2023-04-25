@@ -21,15 +21,15 @@ const sendEmail = (message) => {
   });
 };
 
-const sendConfirmationEmail = ({ username, text }) => {
+const sendConfirmationEmail = ({ username, subject, link }) => {
   const message = {
     from: "klajdixhafkollari36@gmail.com",
     to: "klajdixhafkollari36@gmail.com",
-    subject: "Verify Email",
+    subject: subject,
     html: `
       <h3> Hello ${username} </h3>
       <p>Thank you for registering into our Application. Much Appreciated! Just one last step is laying ahead of you...</p>
-      <p>To activate your account please follow this link: <a target="_" href="${text}">${text}</a></p>.
+      <p>To activate your account please follow this link: <a target="_" href="${link}">${link}</a></p>.
       <p>Cheers</p>
       <p>Your Application Team</p>
     `

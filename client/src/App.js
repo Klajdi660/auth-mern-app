@@ -6,7 +6,7 @@ import EmailVerify from "./components/EmailVerify";
 import ForgotPassword from "./components/ForgotPassword";
 
 const App = () => {
-	const user = localStorage.getItem("token");
+	const user = localStorage.getItem("userDataToken");
 
 	return (
 		<Routes>
