@@ -21,4 +21,14 @@ const authValidate = (data) => {
 	return schema.validate(data);
 };
 
-export const userModel = { userValidate, authValidate };
+const authForgotPassword = (data) => {
+	console.log(data)
+	const schema = Joi.object({
+		newPassword: passwordComplexity().required().label("New Password"),
+		confirmNewPassword: passwordComplexity().required().label("Confirm new Password"),
+
+	});
+	return schema.validate(data);
+};
+
+export const userModel = { userValidate, authValidate, authForgotPassword };

@@ -36,7 +36,7 @@ const ForgotPassword = () => {
 
 	const handleSubmit = async () => {
 		try {
-			const url = "http://localhost:8080/api/auth";
+			const url = "http://localhost:8080/api/auth/forgotPassword";
 			const { data: res } = await axios.post(url, data);
 			localStorage.setItem("token", res.data);
 			window.location = "/";
@@ -69,18 +69,18 @@ const ForgotPassword = () => {
 							name="newPassword"
 							rules={[{ required: true, message: 'Please input your new password!' }]}
 						>
-							<Input 
+							<Input.Password
 							    placeholder="New password"
 							    className={styles.input}
 								onChange={handleChange}
 								value={data.email}
-								name="newPassord"
-								prefix={<UserOutlined/>}
+								name="newPassword"
+								prefix={<LockOutlined/>}
 							/>
     					</Form.Item>
 						<Form.Item
 							name="confirmNewPassword"
-							rules={[{ required: true, message: 'Please input your password!' }]}
+							rules={[{ required: true, message: 'Please confirm your new password!' }]}
 						>
 						    <Input.Password
 							    placeholder="Confirm new password"

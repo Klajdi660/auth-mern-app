@@ -207,8 +207,8 @@ const Signup = () => {
                 Sign Up
               </Button>
               <div className={styles.up_link}>
-							  Already have an account?&nbsp;&nbsp;<Link to="/login">Sign in</Link>
-							</div>
+                Already have an account?&nbsp;&nbsp;<Link to="/login">Sign in</Link>
+              </div>
             </div>
           </Form>
         </div>

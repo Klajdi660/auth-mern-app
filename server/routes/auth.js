@@ -49,5 +49,29 @@ router.post("/", async (req, res) => {
 		res.status(500).send({ error: true, message: "Internal Server Error" });
 	}
 });
+router.post('/forgotPassword', async (req, res) => {
+	try {
+		const { newPassword, confirmNewPassword } = req.body;
+        console.log("re", req.body)
+		const { error } = userModel.authForgotPassword(req.body);
+
+		if (error) {
+			return res.status(400).send({ error: true, message: error.details[0].message });
+		}
+
+		// Update password in the MySQL database
+		// const query = `UPDATE register SET password = ? WHERE email = ?`;
+		// const [rows] = await connection.query(query);
+        // console.log("row", rows);
+		// if (rows.affectedRows === 1) {
+		// 	return res.status(200).json({ message: 'Password updated successfully.' });
+		// } else {
+		// 	return res.status(400).json({ message: 'Failed to update password.' });
+		// }
+	} catch (error) {
+		console.error(error);
+		return res.status(500).json({ message: 'Internal server error.' });
+	}
+});
 
 export default router;
