@@ -3,13 +3,14 @@ import bcrypt from "bcrypt";
 import jwt from "jsonwebtoken";
 import config from "config";
 import sendConfirmationEmail from "../utils/sendEmail.js";
-import connection from "../db.js";
+import connection from "../db/db.js";
 import { userModel } from "../models/user.js";
 
-const { jwtSecret, jwtExpiresIn, jwtCookieExpires } = config.get("tokenConfigs");
+const { jwtSecret, jwtExpiresIn, jwtCookieExpires } = config.get("tokenConfig");
 
 const router = express.Router();
 
+// user Login
 router.post("/", async (req, res) => {
   const { email, password } = req.body;
 
@@ -22,72 +23,69 @@ router.post("/", async (req, res) => {
   }
 
   try {
-	const query = "SELECT * FROM register WHERE email = ?";
-
-    connection.query(query, [email], async (err, results) => {
-        if (error) {
-          console.error(error);
-          return res
-            .status(500)
-            .send({ error: true, message: "Internal Server Error" });
-        }
-
-        const user = results[0];
-
-        if (!user) {
-          return res
-            .status(401)
-            .send({ error: true, message: "Invalid Email or Password!" });
-        }
-
-        const validPassword = await bcrypt.compare(password, user.password);
-
-        if (!validPassword) {
-          return res
-            .status(401)
-            .send({ error: true, message: "Invalid Email or Password!" });
-        }
-
-        if (!user.verified) {
-          const url = `http://localhost:3000/users/${user.id}/verify`;
-          const subject = "Login email verification";
-          await sendConfirmationEmail({
-            username: user.email,
-            subject: subject,
-            link: url,
-          });
-
-          return res.status(401).send({
-            error: true,
-            message: `Email ${user.email} not verified. A verification email has been sent. Please check your inbox.`,
-          });
-        }
-        
-		const id = user.id;
-		
-		const loginToken = jwt.sign({ id }, jwtSecret, {
-			expiresIn: jwtExpiresIn
-		});
-		
-		const cookieOptions = {
-			expires: new Date(
-				Date.now() + jwtCookieExpires * 24 * 60 * 60 * 1000
-			),
-			httpOnly: true
-		};
-		
-		res.cookie("usercookie", loginToken, cookieOptions);
-
-		// const loginResults = {
-		// 	user,
-		// 	loginToken
-		// };
-
-		res
-          .status(200)
-          .send({ error: false, message: "Logged in successfully" , loginToken });
+    connection.query( "SELECT * FROM register WHERE email = ?", [email], async (err, results) => {
+      if (error) {
+        console.error(error);
+        return res
+          .status(500)
+          .send({ error: true, message: "Internal Server Error" });
       }
-    );
+
+      const user = results[0];
+
+      if (!user) {
+        return res
+          .status(401)
+          .send({ error: true, message: "Invalid Email or Password!" });
+      }
+
+      const validPassword = await bcrypt.compare(password, user.password);
+
+      if (!validPassword) {
+        return res
+          .status(401)
+          .send({ error: true, message: "Invalid Email or Password!" });
+      }
+
+      if (!user.verified) {
+        const url = `http://localhost:3000/users/${user.id}/verify`;
+        const subject = "Login email verification";
+        await sendConfirmationEmail({
+          username: user.email,
+          subject: subject,
+          link: url,
+        });
+
+        return res.status(401).send({
+          error: true,
+          message: `Email ${user.email} not verified. A verification email has been sent. Please check your inbox.`,
+        });
+      }
+        
+		  const id = user.id;
+		
+      const loginToken = jwt.sign({ id }, jwtSecret, {
+        expiresIn: jwtExpiresIn
+      });
+		
+      const cookieOptions = {
+        expires: new Date(
+          Date.now() + jwtCookieExpires * 24 * 60 * 60 * 1000
+        ),
+        httpOnly: true
+      };
+		
+		  res.cookie("usercookie", loginToken, cookieOptions);
+
+      // const loginResults = {
+      // 	user,
+      // 	loginToken
+      // };
+
+      res
+        .status(200)
+        .send({ error: false, message: "Logged in successfully" , loginToken });
+    });
   } catch (error) {
     res.status(500).send({ error: true, message: "Internal Server Error" });
   }

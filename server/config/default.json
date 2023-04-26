@@ -1,0 +1,18 @@
+{
+  "app": {
+    "port": 8080
+  },
+  "tokenConfig": {
+    "jwtSecret": "Klajdi96@",
+    "jwtExpiresIn": "120s",
+    "jwtCookieExpires": 1
+  },
+  "dbConfig": {
+    "host": "localhost",
+    "user": "root",
+    "password": "Klajdi1996",
+    "database": "node-reg",
+    "waitForConnections": true,
+    "connectionLimit": 10
+  }
+}
