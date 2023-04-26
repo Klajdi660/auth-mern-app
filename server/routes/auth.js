@@ -7,7 +7,7 @@ const { logIn, sendPasswordLink, logOut } = authController;
 const router = express.Router();
 
 // user Login
-router.post("/login", logIn);
+router.post("/", logIn);
 
 // user send link to reset password 
 router.post("/sendPasswordLink", sendPasswordLink);

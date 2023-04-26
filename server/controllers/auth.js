@@ -43,10 +43,7 @@ const logIn = async (req, res) => {
                     link: url,
                 });
 
-                return res.status(401).send({
-                    error: true,
-                    message: `Email ${user.email} not verified. A verification email has been sent. Please check your inbox.`,
-                });
+                return res.status(401).send({ error: true, message: `Email ${user.email} not verified. A verification email has been sent. Please check your inbox.` });
             }
           
             const id = user.id;
@@ -62,7 +59,7 @@ const logIn = async (req, res) => {
                 httpOnly: true
             };
           
-            res.cookie("usercookie", userToken, cookieOptions);
+            res.cookie("userCookie", userToken, cookieOptions);
   
             // const loginResults = {
             // 	user,
@@ -128,6 +125,7 @@ const sendPasswordLink = async (req, res) => {
 
 const logOut = async (req, res) => {
     // const tokens = req.user.tokens
+    // in mysql table tokens is JSON
 };
 
 export const authController = { logIn, sendPasswordLink, logOut };

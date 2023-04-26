@@ -20,8 +20,8 @@ const Login = () => {
 
 	const handleSubmit = async () => {
 		try {
-			const url = "http://localhost:8080/api/auth/login";
-			const res = await axios.post(url, data);
+			const url = "http://localhost:8080/api/auth";
+			const res = await axios.post(url, data, { withCredentials: true });
 			const { userToken } = res.data;
 			localStorage.setItem("userToken", userToken);
 			window.location = "/";
