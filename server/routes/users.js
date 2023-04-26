@@ -1,7 +1,7 @@
 import express from "express";
 import { userModel } from "../models/user.js";
 import bcrypt from "bcrypt";
-import connection from "../db/db.js";
+import connection from "../models/db.js";
 import sendConfirmationEmail from "../utils/sendEmail.js";
 
 const router = express.Router();
