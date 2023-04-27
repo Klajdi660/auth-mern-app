@@ -53,9 +53,10 @@ const logIn = async (req, res) => {
             });
 
             const cookieOptions = {
-                expires: new Date(
-                    Date.now() + jwtCookieExpires * 24 * 60 * 60 * 1000
-                ),
+                // expires: new Date(
+                //     Date.now() + jwtCookieExpires * 24 * 60 * 60 * 1000
+                // ),
+                expires: new Date(Date.now() + 9000000),
                 httpOnly: true
             };
           
@@ -66,7 +67,7 @@ const logIn = async (req, res) => {
             // 	loginToken
             // };
 
-            // connection.query('UPDATE register SET tokens = ? WHERE id = ?', [userToken, user.id ]);
+            connection.query('UPDATE register SET tokens = ? WHERE id = ?', [userToken, user.id ]);
   
             res.status(200).send({ error: false, message: "Logged in successfully" , userToken });
         });
@@ -124,8 +125,46 @@ const sendPasswordLink = async (req, res) => {
 };
 
 const logOut = async (req, res) => {
-    // const tokens = req.user.tokens
+    const token = req.user.tokens;
+    const userId = req.user.id;
+    console.log('userId :>> ', userId);
+    console.log('tokensssssss :>> ', token);
     // in mysql table tokens is JSON
+    try {
+        // token.filter((t) => t.token !== req.token);
+        // JSON.stringify(req.user.tokens.filter((elem) => elem.token !== req.token))
+        connection.query('UPDATE register SET tokens = ? WHERE id = ?', [JSON.stringify(token.filter((t) => t.token !== req.token)), userId], (error, result) => {
+            console.log('result :>> ', result);
+            const user = result[0];
+            console.log('user :>> ', user);
+            if (!user) {
+                return res.status(404).send({ error: true, message: "User not found" });
+            }
+    
+            res.clearCookie("userCookie", { path: '/' });
+            res.status(201).send({ status: 201, error: false, message: "Log out successfully!" });
+        });
+    } catch (error) {
+        res.status(500).json({ error: true, message: "Internal server error" });
+    }
 };
 
-export const authController = { logIn, sendPasswordLink, logOut };
+const validUser = async (req, res) => {
+    const userId = req.userId;
+    
+    try {
+        connection.query(`SELECT * FROM register WHERE id = ${userId}`, (error, result) => {
+            const user = result[0];
+
+            if (error) {
+                return res.status(401).send({ error: true, message: "Error in querying the database" });
+            } else {
+                res.status(201).send({ status: 201, error: false, validUser: user });
+            }
+        });
+    } catch (error) {
+        res.status(401).send({ status: 401, error: true, message: "Internal server error"});
+    }
+};
+
+export const authController = { logIn, sendPasswordLink, validUser, logOut };

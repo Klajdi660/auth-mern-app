@@ -1,4 +1,4 @@
-import { Link } from "react-router-dom";
+import { Link , useNavigate } from "react-router-dom";
 import axios from "axios";
 import styles from "./styles.module.css";
 import { useContext, useEffect, useState } from "react";
@@ -8,54 +8,53 @@ import { Space, Spin, ConfigProvider } from 'antd';
 const Main = () => {
 	const { loading, setLoading } = useContext(LoadingContext);
     const [data, setData] = useState(false);
+    const history = useNavigate();
 
-	// const handleLogout = () => {
-	// 	localStorage.removeItem("userToken");
-	// 	window.location.reload();
-	// };
+	const handleLogout = () => {
+		localStorage.removeItem("userToken");
+		window.location.reload();
+	};
 
 
-    const logoutUser = async () => {
-        let token = localStorage.getItem("userToken");
-        console.log('token :>> ', token);
-        const url = "http://localhost:8080/api/auth/logout";
+    // const handleLogout = async () => {
+    //     let token = localStorage.getItem("userToken");
+    //     const url = "http://localhost:8080/api/auth/logout";
 		
-		// const res = await axios.get(url, {
-        //     method: "GET",
-        //     headers: {
-        //         "Content-Type": "application/json",
-        //         "Authorization": token,
-        //         Accept: "application/json"
-        //     },
-        //     credentials: "include"
-        // });
+	// 	const res = await axios.get(url, {
+	// 		headers: {
+	// 		  "Content-Type": "application/json",
+	// 		  Authorization: token,
+	// 		  Accept: "application/json",
+	// 		},
+	// 		withCredentials: true,
+	// 	});
 	  
+	// 	console.log('response :>> ', res);
+    // };
 
-        // const data = await res.json();
-        // console.log("data", data);
+	const validUser = async () => {
+		let token = localStorage.getItem("userToken");
+		const url = "http://localhost:8080/api/auth/logout";
 
-		const response = await axios.get(url, {
+		const res = await axios.get(url, {
 			headers: {
-			  "Content-Type": "application/json",
-			  Authorization: token,
-			  Accept: "application/json",
+				"Content-Type": "application/json",
+				Authorization: token,
+				Accept: "application/json"
 			},
-			withCredentials: true,
+			withCredentials: true
 		});
-	  
-		console.log('response :>> ', response);
 
-        // if (data.status === 201) {
-        //     console.log("use logout");
-            // localStorage.removeItem("userToken");
-        //     // setLoginData(false)
-        //     // history("/");
-        // } else {
-        //     console.log("error");
-        // }
-    };
+		const data = res.data;
 
-	
+		if (data.status === 401 || !data) {
+			history("*");
+		} else {
+			console.log("user verify");
+			setLoading(data);
+			history("/");
+		}
+	};
 
 	useEffect(() => {
 		setTimeout(() => {
@@ -72,7 +71,7 @@ const Main = () => {
 							<Link to="/" style={{ textDecoration: "none" }}>
 								<h1>HP Cloud</h1>
 							</Link>
-							<button className={styles.white_btn} /*onClick={handleLogout}*/ onClick={() => logoutUser()}>
+							<button className={styles.white_btn} /*onClick={handleLogout}*/ onClick={handleLogout}>
 								Logout
 							</button>
 						</nav>
@@ -85,7 +84,8 @@ const Main = () => {
 				    <ConfigProvider
 						theme={{
 							token: {
-								colorPrimary: '#2a4365',
+								// colorPrimary: '#2a4365',
+								colorPrimary: "#1a365d"
 							},
 						}}
 					>
