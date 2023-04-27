@@ -36,6 +36,7 @@
 .form_container h1 {
 	font-size: 40px;
 	margin-top: 0;
+	color: #2a4365
 }
 
 .input {
@@ -62,6 +63,11 @@
 
 .green_btn {
 	width: 150px;
+	background: #1a365d;
+	color: #fff;
+}
+.green_btn:hover {
+	background-color: #97a1b1;
 }
 
 .signup_buttons {

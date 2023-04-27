@@ -2,7 +2,6 @@ import { useState } from "react";
 import axios from "axios";
 import { Link } from "react-router-dom";
 import styles from "./styles.module.css";
-
 import {
   Button,
   Checkbox,
@@ -199,7 +198,8 @@ const Signup = () => {
             )}
             <div className={styles.signup_buttons}>
               <Button 
-                type="primary"
+                // type="primary"
+                type="none"
                 htmlType="submit" 
                 icon={<LoginOutlined />}
                 className={styles.green_btn}

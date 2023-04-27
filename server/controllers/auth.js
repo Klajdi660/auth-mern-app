@@ -17,9 +17,9 @@ const logIn = async (req, res) => {
     }
   
     try {
-        connection.query( "SELECT * FROM register WHERE email = ?", [email], async (err, results) => {
+        connection.query( "SELECT * FROM register WHERE email = ?", [email], async (error, results) => {
             if (error) {
-                return res.status(500).send({ error: true, message: "Internal Server Error" });
+                return res.status(500).send({ error: true, message: "Error in querying the database" });
             }
   
             const user = results[0];
@@ -66,8 +66,8 @@ const logIn = async (req, res) => {
             // 	user,
             // 	loginToken
             // };
-
-            connection.query('UPDATE register SET tokens = ? WHERE id = ?', [userToken, user.id ]);
+            // const validJson = JSON.stringify(userToken);
+            // connection.query('UPDATE register SET tokens = ? WHERE id = ?', [validJson, user.id ]);
   
             res.status(200).send({ error: false, message: "Logged in successfully" , userToken });
         });
@@ -85,6 +85,9 @@ const sendPasswordLink = async (req, res) => {
 
     try {
         connection.query("SELECT * FROM register WHERE email=?", [email], async (error, results) => {
+            if (error) {
+                return res.status(500).send({ error: true, message: "Error in querying the database"})
+            }
             if (results.length === 0) {
                 return res.status(401).send({
                     error: true,
@@ -99,7 +102,7 @@ const sendPasswordLink = async (req, res) => {
                 expiresIn: jwtExpiresIn,
             });
             
-            connection.query("UPDATE register SET verifyToken = ? WHERE id = ?", [
+            connection.query("UPDATE register SET tokens = ? WHERE id = ?", [
                 token,
                 user.id,
             ]);
@@ -125,25 +128,31 @@ const sendPasswordLink = async (req, res) => {
 };
 
 const logOut = async (req, res) => {
+    console.log('req.user :>> ', req.user);
     const token = req.user.tokens;
-    const userId = req.user.id;
-    console.log('userId :>> ', userId);
-    console.log('tokensssssss :>> ', token);
+    console.log('token :>> ', token);
+    // const token = req.cookies.userCookie;
+    // const userId = req.user.id;
+    // console.log('userId :>> ', userId);
+    // console.log('tokensssssss :>> ', token);
     // in mysql table tokens is JSON
     try {
+        // const newTokens = token.filter(t => t);
+        // const newTokens = req.cookies.userCookie.filter();
+        // console.log('newTokens :>> ', newTokens);
         // token.filter((t) => t.token !== req.token);
         // JSON.stringify(req.user.tokens.filter((elem) => elem.token !== req.token))
-        connection.query('UPDATE register SET tokens = ? WHERE id = ?', [JSON.stringify(token.filter((t) => t.token !== req.token)), userId], (error, result) => {
-            console.log('result :>> ', result);
-            const user = result[0];
-            console.log('user :>> ', user);
-            if (!user) {
-                return res.status(404).send({ error: true, message: "User not found" });
-            }
+        // connection.query('UPDATE register SET tokens = ? WHERE id = ?', [JSON.stringify(token.filter((t) => t.token !== req.token)), userId], (error, result) => {
+        //     console.log('result :>> ', result);
+        //     const user = result[0];
+        //     console.log('user :>> ', user);
+        //     if (!user) {
+        //         return res.status(404).send({ error: true, message: "User not found" });
+        //     }
     
-            res.clearCookie("userCookie", { path: '/' });
-            res.status(201).send({ status: 201, error: false, message: "Log out successfully!" });
-        });
+        //     res.clearCookie("userCookie", { path: '/' });
+        //     res.status(201).send({ status: 201, error: false, message: "Log out successfully!" });
+        // });
     } catch (error) {
         res.status(500).json({ error: true, message: "Internal server error" });
     }

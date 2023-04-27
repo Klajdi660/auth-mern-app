@@ -22,6 +22,7 @@ const Login = () => {
 		try {
 			const url = "http://localhost:8080/api/auth";
 			const res = await axios.post(url, data, { withCredentials: true });
+			
 			const { userToken } = res.data;
 			localStorage.setItem("userToken", userToken);
 			window.location = "/";
@@ -89,7 +90,8 @@ const Login = () => {
 						<div className={styles.buttons}>
 							<Button
 								className={styles.green_btn}
-								type="primary"
+								// type="primary"
+								type="none"
 								htmlType="submit"
 								icon={<LoginOutlined/>}
 							>

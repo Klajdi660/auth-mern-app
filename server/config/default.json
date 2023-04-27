@@ -5,13 +5,13 @@
   "tokenConfig": {
     "jwtSecret": "Klajdi96@",
     "jwtExpiresIn": "120s",
-    "jwtCookieExpires": "1d"
+    "jwtCookieExpires": "2d"
   },
   "dbConfig": {
     "host": "localhost",
     "user": "root",
-    "password": "",
-    "database": "node-registration",
+    "password": "Klajdi1996",
+    "database": "node-reg",
     "waitForConnections": true,
     "connectionLimit": 10
   }

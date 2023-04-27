@@ -9,6 +9,7 @@ const authenticate = async (req, res, next) => {
         const token = req.headers.authorization;
         
         const verifyToken = jwt.verify(token, jwtSecret);
+        console.log('verifyToken :>> ', verifyToken);
         
         connection.query("SELECT * FROM register WHERE id = ?", [verifyToken.id], (error, result) => {
             if (error) {
@@ -27,8 +28,17 @@ const authenticate = async (req, res, next) => {
             next();
         });
     } catch (error) {
-        console.erro(error);
-        res.status(401).send({ error: true, message: "Unauthorized: No token provided" });
+        // console.error(error);
+        // res.status(401).send({ error: true, message: "Unauthorized: No token provided" });
+        if (error.name === "JsonWebTokenError") {
+            return res.status(401).send({ error: true, message: "Unauthorized access"});
+        }
+
+        if (error.name === "TokenExpiredError") {
+            return res.status(401).send({ error: true, message: "Session expired try sign in"});
+        }
+
+        res.status(401).send({ error: true, message: 'Invalid token' })
     }
 };
 

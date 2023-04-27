@@ -64,6 +64,11 @@
 
 .green_btn {
 	width: 150px;
+	background: #1a365d;
+	color: #fff;
+}
+.green_btn:hover {
+	background-color: #97a1b1;
 }
 
 .buttons {
