@@ -2,7 +2,7 @@ import express from "express";
 import { authController } from "../controllers/auth.js";
 import authenticate from "../middleware/authenticate.js";
 
-const { logIn, sendPasswordLink, validUser, logOut } = authController;
+const { logIn, validUser, logOut } = authController;
 
 const router = express.Router();
 
@@ -10,7 +10,7 @@ const router = express.Router();
 router.post("/", logIn);
 
 // user send link to reset password 
-router.post("/sendPasswordLink", sendPasswordLink);
+// router.post("/sendPasswordLink", sendPasswordLink);
 
 // user valid
 router.get("/validUser", authenticate, validUser);

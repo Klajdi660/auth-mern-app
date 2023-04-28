@@ -7,7 +7,7 @@ const usersRegister = async (req, res) => {
     const { firstName, lastName, email, password, passwordConfirm } = req.body;
     
 	const { error } = userModel.userValidate(req.body);
-	
+	console.log('error :>> ', error);
 	if (error) {
 		return res.status(400).send({ error: true, message: error.details[0].message });
 	}
@@ -34,10 +34,10 @@ const usersRegister = async (req, res) => {
 			    password: hashPassword,
 				// password: password
 		    }, async (error, results) => {
-			    if (error) {
-				    console.error(error);
-			    } 
-		
+				if (error) {
+					return res.status(500).send({ error: true, message: "Error in querying the database" });
+				}
+
 				const url = `http://localhost:3000/users/${results.insertId}/verify`;
 				const subject = "Verify email";
 				await sendConfirmationEmail({ username: `${firstName} ${lastName}`, subject: subject, link: url });
@@ -48,7 +48,6 @@ const usersRegister = async (req, res) => {
 			    .send({ error: false, message: "A message with a weblink has been sent to your email address. Please click that link to proceed." });
 		});
 	} catch (error) {
-		console.error(error);
 		res.status(500).send({ error: true, message: "Internal Server Error" });
 	}
 };
@@ -59,9 +58,8 @@ const userVerification = async (req, res) => {
 	try {
 		connection.query(`SELECT * FROM register WHERE id = ?`, [id], (error, results) => {
 			if (error) {
-				console.error(error);
-				return res.status(500).send({ error: true, message: "Internal Server Error" });
-			}
+                return res.status(500).send({ error: true, message: "Error in querying the database" });
+            }
 	
 			const user = results[0];
 	
@@ -69,19 +67,16 @@ const userVerification = async (req, res) => {
 				return res.status(400).send({ error: true, message: "Invalid link" });
 			}
 	
-			connection.query(
-				`UPDATE register SET verified = true WHERE id = ?`, [id], (err, results) => {
-				  if (err) {
-					console.error(err);
-					return res.status(500).send({ error: true, message: "Internal Server Error" });
-				  }
+			connection.query(`UPDATE register SET verified = true WHERE id = ?`, [id], (error, results) => {
+					if (error) {
+						return res.status(500).send({ error: true, message: "Error in querying the database" });
+					}
 	
 				  res.status(200).send({ error: false, message: "Email verified successfully" });
 				}
 			);
 		});
 	} catch (error) {
-		console.error(error);
 		res.status(500).send({ error: true, message: "Internal Server Error" });
 	}
 };

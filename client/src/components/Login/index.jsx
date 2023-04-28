@@ -18,14 +18,54 @@ const Login = () => {
 		setData({ ...data, [input.name]: input.value });
 	};
 
-	const handleSubmit = async () => {
-		try {
-			const url = "http://localhost:8080/api/auth";
-			const res = await axios.post(url, data, { withCredentials: true });
+	// const handleSubmit = async () => {
+	// 	try {
+	// 		const url = "http://localhost:8080/api/auth";
+	// 		const res = await axios.post(url, data, { withCredentials: true });
 			
-			const { userToken } = res.data;
-			localStorage.setItem("userToken", userToken);
-			window.location = "/";
+	// 		const { userToken } = res.data;
+	// 		localStorage.setItem("userToken", userToken);
+	// 		window.location = "/";
+	// 	} catch (error) {
+	// 		if (
+	// 			error.response &&
+	// 			error.response.status >= 400 &&
+	// 			error.response.status <= 500
+	// 		) {
+	// 			setError(error.response.data.message);
+
+	// 			// Clear error after 5 seconds
+	// 			setTimeout(() => {
+	// 				setError("");
+	// 			}, 3000);
+	// 		}
+	// 	}
+	// };
+
+	const handleSubmit = async () => {
+		const url = "http://localhost:8080/api/auth";
+		try {
+		  const response = await axios.post(url, data, {
+			withCredentials: true,
+			headers: {
+			  'Content-Type': 'application/json',
+			},
+		  });
+	  
+		  const { accessToken } = response.data;
+		  console.log('result :>> ', accessToken);
+		  console.log('response.data :>> ', response.data);
+		  localStorage.setItem("userToken", accessToken);
+	       window.location = "/";
+	  
+		//   if (result.accesstoken) {
+		// 	setUser({
+		// 	  accesstoken: result.accesstoken,
+		// 	});
+		// 	navigate('/');
+		//   } else {
+		// 	console.log(result.error);
+		//   }
 		} catch (error) {
 			if (
 				error.response &&
@@ -41,6 +81,7 @@ const Login = () => {
 			}
 		}
 	};
+	  
 
 	return (
 		<div className={styles.login_container}>

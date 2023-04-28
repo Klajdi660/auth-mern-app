@@ -5,20 +5,21 @@ import cookiParser from "cookie-parser";
 import userRoutes from "./routes/users.js";
 import authRoutes from "./routes/auth.js";
 
-const app = express();
-
 const { port } = config.get("app");
 
+const app = express();
+
+//  Use express middleware for easier cookie handling
 const corsOptions = {
     origin: "http://localhost:3000",
-    methods: [ "POST", "GET" ],
     credentials: true, 
 };
-
-// middlewares
-app.use(express.json());
 app.use(cors(corsOptions));
 app.use(cookiParser());
+
+// Neede to be able to read body data
+app.use(express.json()); // to support JSON-encoded bodies
+app.use(express.urlencoded({ extended: true })); // to support URL-encoded boddies
 
 // routes
 app.use("/api/users", userRoutes);

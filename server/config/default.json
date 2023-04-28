@@ -3,7 +3,8 @@
     "port": 8080
   },
   "tokenConfig": {
-    "jwtSecret": "Klajdi96@",
+    "ACCESS_TOKEN_SECRET": "Klajdi96@",
+    "REFRESH_TOKEN_SECRET": "Klajdi1996@",
     "jwtExpiresIn": "120s",
     "jwtCookieExpires": "2d"
   },

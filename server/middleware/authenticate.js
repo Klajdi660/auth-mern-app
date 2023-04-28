@@ -5,8 +5,11 @@ import config from "config";
 const { jwtSecret } = config.get("tokenConfig");
 
 const authenticate = async (req, res, next) => {
+    // const authHeader = req.headers.authorization;
+
     try {
         const token = req.headers.authorization;
+        console.log('token :>> ', token);
         
         const verifyToken = jwt.verify(token, jwtSecret);
         console.log('verifyToken :>> ', verifyToken);

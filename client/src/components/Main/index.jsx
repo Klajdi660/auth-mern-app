@@ -24,7 +24,8 @@ const Main = () => {
 		const res = await axios.get(url, {
 			headers: {
 			  "Content-Type": "application/json",
-			  Authorization: token,
+			    //   Authorization: token,
+			  Authorization: `Bearer ${token}`,
 			  Accept: "application/json",
 			},
 			withCredentials: true,
