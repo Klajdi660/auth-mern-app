@@ -11,8 +11,7 @@ const { createAccessToken, createRefreshToken, sendAccessToken, sendRefreshToken
 let tokens = [];
 
 const logIn = async (req, res) => {
-    const { email, password } = req.body;
-  
+    const { email, password, remember } = req.body;
     const { error } = userModel.authValidate(req.body);
   
     if (error) {
@@ -26,78 +25,30 @@ const logIn = async (req, res) => {
             }
   
             const user = results[0];
-
-            if (user) {
-                // compare passwords 
-                const isPasswordsMatch = await bcrypt.compare(password, user.password);
-
-                if (!isPasswordsMatch) {
-                    return res .status(401).send({ error: true, message: "Invalid Email or Password!" });
-                }
-
-                if (!user.verified) {
-                    const url = `http://localhost:3000/users/${user.id}/verify`;
-                    const subject = "Login email verification";
-                    await sendConfirmationEmail({
-                        username: user.email,
-                        subject: subject,
-                        link: url,
-                    });
-    
-                    return res.status(401).send({ error: true, message: `Email ${user.email} not verified. A verification email has been sent. Please check your inbox.` });
-                }
-
-                const id = user.id;
-                const token = jwt.sign({ id },  ACCESS_TOKEN_SECRET, {
-                    expiresIn: jwtExpiresIn
-                });
-
-                tokens.push(token);
-
-                const cookieOptions = {
-                    // expires: new Date(
-                    //     Date.now() + jwtCookieExpires * 24 * 60 * 60 * 1000
-                    // ),
-                    expires: new Date(Date.now() + 9000000),
-                    httpOnly: true
-                };
-
-                res.cookie("userCookie", tokens, cookieOptions);
   
-                const result = {
-                	user,
-                	tokens
-                };
-
-                res.status(201).send({ status: 201, error: false, message: "Logged in successfully", result });
-
-            } else {
-                return res.status(401).send({ error: true, message: "Invalid Email or Password!" });   
+            if (!user) {
+                return res.status(401).send({ error: true, message: "Invalid Email or Password!" });
             }
   
-            // if (!user) {
-            //     return res.status(401).send({ error: true, message: "Invalid Email or Password!" });
-            // }
+            const validPassword = await bcrypt.compare(password, user.password);
   
-            // const validPassword = await bcrypt.compare(password, user.password);
-  
-            // if (!validPassword) {
-            //     return res .status(401).send({ error: true, message: "Invalid Email or Password!" });
-            // }
+            if (!validPassword) {
+                return res .status(401).send({ error: true, message: "Invalid Email or Password!" });
+            }
 
-            // if (!user.verified) {
-            //     const url = `http://localhost:3000/users/${user.id}/verify`;
-            //     const subject = "Login email verification";
-            //     await sendConfirmationEmail({
-            //         username: user.email,
-            //         subject: subject,
-            //         link: url,
-            //     });
+            if (!user.verified) {
+                const url = `http://localhost:3000/users/${user.id}/verify`;
+                const subject = "Login email verification";
+                await sendConfirmationEmail({
+                    username: user.email,
+                    subject: subject,
+                    link: url,
+                });
 
-            //     return res.status(401).send({ error: true, message: `Email ${user.email} not verified. A verification email has been sent. Please check your inbox.` });
-            // }
+                return res.status(401).send({ error: true, message: `Email ${user.email} not verified. A verification email has been sent. Please check your inbox.` });
+            }
           
-            // const id = user.id;
+            const id = user.id;
 
             // // 3. Create Refresh- and Accesstoken
             // const accessToken = createAccessToken(user.id);
@@ -113,28 +64,38 @@ const logIn = async (req, res) => {
             // sendRefreshToken(res, refreshToken);
             // sendAccessToken(res, req, accessToken);
           
-            // const userToken = jwt.sign({ id },  ACCESS_TOKEN_SECRET, {
-            //     expiresIn: "2d"
-            // });
-
+            const token = jwt.sign({ id },  ACCESS_TOKEN_SECRET, {
+                expiresIn: "2d"
+            });
+            
             // const cookieOptions = {
             //     // expires: new Date(
             //     //     Date.now() + jwtCookieExpires * 24 * 60 * 60 * 1000
             //     // ),
-            //     expires: new Date(Date.now() + 9000000),
+            //     // expires: new Date(Date.now() + 9000000),
+            //     expires: remember ? new Date(Date.now() + 30 * 24 * 60 * 60 * 1000) : new Date(Date.now() + 9000000),
             //     httpOnly: true
             // };
           
-            // res.cookie("userCookie", userToken, cookieOptions);
-  
-            // const loginResults = {
-            // 	user,
-            // 	loginToken
-            // };
+            const cookieOptions = {
+                httpOnly: true
+            };
+        
+            if (remember) {
+                console.log('remember :>> ', remember);
+                cookieOptions.expires = new Date(Date.now() + 30 * 24 * 60 * 60 * 1000); // cookie will expire in 30 days if "remember me" is checked
+            }
+        
+            res.cookie("userCookie", token, cookieOptions);
+              
+            const result = {
+            	user,
+            	token
+            };
             // const validJson = JSON.stringify(userToken);
             // connection.query('UPDATE register SET tokens = ? WHERE id = ?', [validJson, user.id ]);
   
-            // res.status(200).send({ error: false, message: "Logged in successfully", userToken});
+            res.status(201).send({ status: 201, error: false, message: "Logged in successfully", result });
         });
     } catch (error) {
       res.status(500).send({ error: true, message: "Internal Server Error" });
@@ -191,43 +152,22 @@ const logIn = async (req, res) => {
 //         return res.status(500).json({ message: "Internal server error." });
 //     }
 // };
+// let tokens = [];
 
 const logOut = async (req, res) => {
     const token = req.token;
-    // const token = req.cookies.userCookie;
-    const userId = req.userId;
-    console.log('userId :>> ', userId);
-  
+    tokens.push(token);
+    tokens = tokens.filter((t) => t !== token)
+       
     try {
-        // const newTokens = token.filter(t => t);
-        // const newTokens = req.cookies.userCookie.filter();
-        // token.filter((t) => t.token !== req.token);
-        // JSON.stringify(req.user.tokens.filter((elem) => elem.token !== req.token))
-        // connection.query('UPDATE register SET tokens = ? WHERE id = ?', [JSON.stringify(token.filter((t) => t.token !== req.token)), userId], (error, result) => {
-        //     const user = result[0];
-        //     if (!user) {
-        //         return res.status(404).send({ error: true, message: "User not found" });
-        //     }
-    
-        //     res.clearCookie("userCookie", { path: '/' });
-        //     res.status(201).send({ status: 201, error: false, message: "Log out successfully!" });
-        // });
-        tokens = JSON.stringify(tokens.filter((tok) => tok !== token));
-
-        console.log('tokens :>> ', tokens.filter((tok) => tok));
-        connection.query('UPDATE register SET tokens = ? WHERE id = ?', [tokens, userId], (error, result) => {
-            console.log('result :>> ', result);
-            const user = result[0];
-            if (!user) {
-                return res.status(404).send({ error: true, message: "User not found" });
-            }
-    
-            // res.clearCookie("userCookie", { path: '/' });
-            res.clearCookie("userCookie");
-            res.status(201).send({ status: 201, error: false, message: "Log out successfully!" });
+        res.clearCookie("userCookie", {
+            sameSite: "none",
+            secure: true
         });
+
+        res.status(201).send({status: 201, error: false, message: "User has been logged out."})
     } catch (error) {
-        res.status(500).json({ error: true, message: "Internal server error" });
+        res.status(500).send({ error: true, message: "Internal server error" });
     }
 };
 

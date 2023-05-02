@@ -16,6 +16,12 @@ const Login = () => {
 	const { loadingData, setLoadingData } = useContext(LoadingContext);
 	const history = useNavigate();
 
+	const [remember, setRemember] = useState(false);
+
+	const handleRememberChange = (e) => {
+	    setRemember(e.target.checked);
+	};
+
 	const handleChange = ({ currentTarget: input }) => {
 		setInputVal({ ...inputVal, [input.name]: input.value });
 	};
@@ -23,17 +29,17 @@ const Login = () => {
 	const handleSubmit = async () => {
 		try {
 			const url = "http://localhost:8080/api/auth";
-			const res = await axios.post(url, inputVal, { 
+			const res = await axios.post(url, { email: inputVal.email, password: inputVal.password, remember: remember }, { 
 				withCredentials: true 
 			});
 			
 			const {status, result } = res.data;
 
 			if (status === 201) {
-				localStorage.setItem("userToken", result.tokens);
+				localStorage.setItem("userToken", result.token);
 				// window.location = "/dash";
 				history("/dash")
-				setInputVal({...inputVal, email: "", password: ""})
+				// setInputVal({...inputVal, email: "", password: ""})
 			}
 		} catch (error) {
 			if (
@@ -67,6 +73,7 @@ const Login = () => {
 						>
 							<Input 
 							    placeholder="Email"
+								autoComplete="username"
 							    className={styles.input}
 								onChange={handleChange}
 								value={inputVal.email}
@@ -84,14 +91,15 @@ const Login = () => {
 							    className={styles.input}
 								value={inputVal.password}
 								name="password"
+								autoComplete="currnet-password"
 								prefix={<LockOutlined/>}
 							/>
 						</Form.Item>
 						{error && <div className={styles.error_msg}>{error}</div>}
 						<Form.Item className={styles.remb_forg}>
-							<Form.Item name="remember" valuePropName="checked" noStyle>
-								<Checkbox>Remember me</Checkbox> 
-							</Form.Item>
+							{/* <Form.Item name="remember" valuePropName="checked" noStyle> */}
+								<Checkbox checked={remember} onChange={handleRememberChange}>Remember me</Checkbox> 
+							{/* </Form.Item> */}
 							<Link to="/forgotPassword" className={styles.forgot}> 
 								Forgot password
 							</Link>

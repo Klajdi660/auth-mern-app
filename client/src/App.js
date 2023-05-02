@@ -5,7 +5,7 @@ import {
   createBrowserRouter,
   RouterProvider,
 } from "react-router-dom";
-import Main from "./components/Main";
+import Main from "./components/Main/";
 import Signup from "./components/Singup";
 import Login from "./components/Login";
 import EmailVerify from "./components/EmailVerify";
@@ -26,12 +26,12 @@ const router = createBrowserRouter([
     element: <Signup/>
   },
   {
-	path: "users/:id/verify",
-	element: <EmailVerify/>
+    path: "users/:id/verify",
+    element: <EmailVerify/>
   },
   {
-	path: "/forgotPassword",
-	element: <ForgotPassword/>
+    path: "/forgotPassword",
+    element: <ForgotPassword/>
   }
 ]);
 const App = () => {

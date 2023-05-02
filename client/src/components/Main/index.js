@@ -10,14 +10,7 @@ const Main = () => {
 	const { loadingData, setLoadingData } = useContext(LoadingContext);
     const [data, setData] = useState(false);
     const history = useNavigate();
-
-	// const handleLogout = () => {
-	// 	localStorage.removeItem("userToken");
-	// 	// window.location.reload();
-	// 	history("/");
-	// };
-
-
+	
     const handleLogout = async () => {
         let token = localStorage.getItem("userToken");
 	
@@ -26,13 +19,22 @@ const Main = () => {
 		const res = await axios.get(url, {
 			headers: {
 			  "Content-Type": "application/json",
-			    Authorization: token,
-			//   Authorization: `Bearer ${token}`,
+			    // Authorization: token,
+			  Authorization: `Bearer ${token}`,
 			  Accept: "application/json",
 			},
 			withCredentials: true,
 		});
-		console.log('res :>> ', res);
+		
+        const { status } = res.data;
+
+		if (status === 201) {
+            localStorage.removeItem("userToken");
+            setLoadingData(false);
+            history("/");
+        } else {
+            console.log("error");
+        }
     };
 
 	const validUser = async () => {

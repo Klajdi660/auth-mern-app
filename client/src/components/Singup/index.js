@@ -122,6 +122,7 @@ const Signup = () => {
               <Input 
                 name="email"
                 placeholder="Email"
+                autoComplete="username"
                 prefix={<MailOutlined/>}
                 className={styles.input}
                 value={data.email}
@@ -141,6 +142,7 @@ const Signup = () => {
               <Input.Password 
                 name="password"
                 placeholder="Password"
+                autoComplete="new-password"
                 prefix={<LockOutlined/>}
                 className={styles.input}
                 value={data.password}
@@ -169,6 +171,7 @@ const Signup = () => {
               <Input.Password 
                 name="passwordConfirm"
                 placeholder="Confirm Password"
+                autoComplete="new-password"
                 prefix={<LockOutlined/>}
                 className={styles.input}
                 value={data.passwordConfirm}
