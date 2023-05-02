@@ -7,7 +7,7 @@ const usersRegister = async (req, res) => {
     const { firstName, lastName, email, password, passwordConfirm } = req.body;
     
 	const { error } = userModel.userValidate(req.body);
-	console.log('error :>> ', error);
+	
 	if (error) {
 		return res.status(400).send({ error: true, message: error.details[0].message });
 	}

@@ -2,16 +2,18 @@ import jwt from "jsonwebtoken";
 import connection from "../models/db.js";
 import config from "config";
 
-const { jwtSecret } = config.get("tokenConfig");
+const {  ACCESS_TOKEN_SECRET } = config.get("tokenConfig");
 
 const authenticate = async (req, res, next) => {
     // const authHeader = req.headers.authorization;
 
     try {
+        // const authorization = req.headers.authorization;
         const token = req.headers.authorization;
-        console.log('token :>> ', token);
+        // const token = authorization.split(' ')[1];
+        console.log('authToken :>> ', token);
         
-        const verifyToken = jwt.verify(token, jwtSecret);
+        const verifyToken = jwt.verify(token,  ACCESS_TOKEN_SECRET);
         console.log('verifyToken :>> ', verifyToken);
         
         connection.query("SELECT * FROM register WHERE id = ?", [verifyToken.id], (error, result) => {
