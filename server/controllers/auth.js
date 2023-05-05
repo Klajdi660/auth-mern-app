@@ -1,23 +1,25 @@
 import bcrypt from "bcrypt";
 import jwt from "jsonwebtoken";
 import config from "config";
-import sendConfirmationEmail from "../utils/sendEmail.js";
+import sendConfirmationEmail from "./mailer.js";
 import connection from "../models/db.js";
 import { userModel } from "../models/user.js";
 import { tokenHelpers } from "../tokens/tokens.js";
-const {  ACCESS_TOKEN_SECRET, jwtExpiresIn, jwtCookieExpires } = config.get("tokenConfig");
+
+const {  ACCESS_TOKEN_SECRET, JWT_EXPIRES_IN, JWT_COOKIE_EXPIRES } = config.get("tokenConfig");
 const { createAccessToken, createRefreshToken, sendAccessToken, sendRefreshToken } = tokenHelpers;
 
 let tokens = [];
 
 const logIn = async (req, res) => {
     const { email, password, remember } = req.body;
-    const { error } = userModel.authValidate(req.body);
-  
-    if (error) {
-      return res.status(400).send({ error: true, message: error.details[0].message });
-    }
-  
+    console.log('remember :>> ', remember);
+    // const { error } = userModel.authValidate(req.body);
+    
+    // if (error) {
+    //   return res.status(400).send({ error: true, message: error.details[0].message });
+    // }
+
     try {
         connection.query( "SELECT * FROM register WHERE email = ?", [email], async (error, results) => {
             if (error) {
@@ -156,9 +158,12 @@ const logIn = async (req, res) => {
 
 const logOut = async (req, res) => {
     const token = req.token;
+    console.log('token :>> ', token);
     tokens.push(token);
+    console.log('tokens :>> ', tokens); 
     tokens = tokens.filter((t) => t !== token)
-       
+    console.log('tokensssss :>> ', tokens);
+   
     try {
         res.clearCookie("userCookie", {
             sameSite: "none",

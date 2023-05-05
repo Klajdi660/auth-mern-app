@@ -1,15 +1,22 @@
+import config from "config";
 import { createTransport } from "nodemailer";
+
+const { SERVICE, HOST, PORT, SECURE, EMAIL, PASSWORD } = config.get("mailerConfig");
+
+let nodeConfig = {
+  service: SERVICE,
+  host: HOST,
+  port: PORT,
+  secure: SECURE,
+  auth: {
+    user: EMAIL,
+    pass: PASSWORD
+  }
+};
 
 const sendEmail = (message) => {
   return new Promise((resolve, reject) => {
-    const transporter = createTransport({
-      service: "gmail",
-		  host: "smtp.gmail.com",
-      auth: {
-			  user: "klajdixhafkollari36@gmail.com",
-        pass: "qejogblzqwvvimac"
-      }
-    });
+    const transporter = createTransport(nodeConfig);
   
     transporter.sendMail(message, (err, info) => {
       if (err) {

@@ -1,7 +1,7 @@
 import { userModel } from "../models/user.js";
 import bcrypt from "bcrypt";
 import connection from "../models/db.js";
-import sendConfirmationEmail from "../utils/sendEmail.js";
+import sendConfirmationEmail from "./mailer.js";
 
 const usersRegister = async (req, res) => {
     const { firstName, lastName, email, password, passwordConfirm } = req.body;

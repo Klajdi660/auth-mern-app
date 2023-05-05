@@ -44,7 +44,8 @@ const Main = () => {
 		const res = await axios.get(url, {
 			headers: {
 				"Content-Type": "application/json",
-				Authorization: token,
+				// Authorization: token,
+				Authorization: `Bearer ${token}`,
 				Accept: "application/json"
 			},
 			withCredentials: true
@@ -56,19 +57,20 @@ const Main = () => {
 			history("*");
 		} else {
 			setLoadingData(data);
-			history("/");
+			history("/dash");
 		}
 	};
 
 	useEffect(() => {
 		setTimeout(() => {
 			setData(true);
-			// validUser();
+			validUser();
 		}, 2000);
 	    // eslint-disable-next-line react-hooks/exhaustive-deps
 	}, []);
 
-	const email = loadingData ? loadingData?.validUser?.email : "Session expired";
+	const email = loadingData?.validUser?.email;
+	console.log('email :>> ', email);
 
 	return (
 		<>
@@ -76,7 +78,7 @@ const Main = () => {
 				data ? 
 					<div className={styles.main_container}>
 						<div className={styles.navbar}>
-							<Link to="/" style={{ textDecoration: "none" }} className={styles.logo}>
+							<Link to="/dash" style={{ textDecoration: "none" }} className={styles.logo}>
 								{/* <h1>HP Cloud</h1> */}
 								HP Cloud
 							</Link>

@@ -1,17 +1,17 @@
 import mysql from "mysql";
 import config from "config";
 
-const { host, user, password, database, waitForConnections, connectionLimit } = config.get("dbConfig");
+const { HOST, USER, PASSWORD, DATABASE, WAIT_FOR_CONNECTIONS, CONNECTION_LIMIT } = config.get("dbConfig");
 
 const connection = mysql.createConnection({
-    host: host,
-    user: user,
-    password: password,
-    database: database,
+    host: HOST,
+    user: USER,
+    password: PASSWORD,
+    database: DATABASE,
     // password: "",
     // database: "node-registration",
-	waitForConnections: waitForConnections,
-    connectionLimit: connectionLimit,
+	waitForConnections: WAIT_FOR_CONNECTIONS,
+    connectionLimit: CONNECTION_LIMIT,
 });
 
 export default connection;

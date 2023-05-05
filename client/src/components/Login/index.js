@@ -29,7 +29,7 @@ const Login = () => {
 	const handleSubmit = async () => {
 		try {
 			const url = "http://localhost:8080/api/auth";
-			const res = await axios.post(url, { email: inputVal.email, password: inputVal.password, remember: remember }, { 
+			const res = await axios.post(url, { ...inputVal, remember }, { 
 				withCredentials: true 
 			});
 			

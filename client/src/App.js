@@ -46,7 +46,7 @@ const App = () => {
     // 	<Route path="/" element={<Navigate replace to="/login" />} />
     // 	<Route path="/users/:id/verify" element={<EmailVerify />} />
     // </Routes>
-    <RouterProvider router={router}></RouterProvider>
+    <RouterProvider router={router}/>
   );
 };
 

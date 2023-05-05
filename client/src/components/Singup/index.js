@@ -30,7 +30,7 @@ const Signup = () => {
   
   const handleSubmit = async () => {
     try {
-      const url = "http://localhost:8080/api/users";
+      const url = "http://localhost:8080/api/users/register";
       const { data: res } = await axios.post(url, data);
       setMsg(res.message);
       // setData(inputs); // reset input fields to initial state
