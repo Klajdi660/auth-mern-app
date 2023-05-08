@@ -1,35 +1,30 @@
-import { useState, useContext } from "react";
+import { useState } from "react";
 import axios from "axios";
 import { Link, useNavigate } from "react-router-dom";
 import styles from "./styles.module.css";
 import { Button, Checkbox, Form, Input } from 'antd';
 import { LockOutlined, UserOutlined, LoginOutlined } from '@ant-design/icons';
-import { LoadingContext } from "../../common/loadingContext";
 
 const Login = () => {
 	const [inputVal, setInputVal] = useState({
-		email: "",
+		usernameOrEmail: "",
         password: "",
+		remember: false
 	});
 	const [error, setError] = useState("");
 	const [form] = Form.useForm();
-	const { loadingData, setLoadingData } = useContext(LoadingContext);
 	const history = useNavigate();
-
-	const [remember, setRemember] = useState(false);
-
-	const handleRememberChange = (e) => {
-	    setRemember(e.target.checked);
-	};
-
-	const handleChange = ({ currentTarget: input }) => {
-		setInputVal({ ...inputVal, [input.name]: input.value });
+    console.log('error :>> ', error);
+	const handleInputChange = (e) => {
+		const { name, value, checked } = e.target;
+	
+		setInputVal({ ...inputVal, [name]: value ? value : checked });
 	};
 
 	const handleSubmit = async () => {
 		try {
 			const url = "http://localhost:8080/api/auth";
-			const res = await axios.post(url, { ...inputVal, remember }, { 
+			const res = await axios.post(url, inputVal, { 
 				withCredentials: true 
 			});
 			
@@ -39,7 +34,7 @@ const Login = () => {
 				localStorage.setItem("userToken", result.token);
 				// window.location = "/dash";
 				history("/dash")
-				// setInputVal({...inputVal, email: "", password: ""})
+				// setInputVal({...inputVal, email: "", password: ""});
 			}
 		} catch (error) {
 			if (
@@ -68,16 +63,16 @@ const Login = () => {
 					>
 						<h1>Welcome Back, Log In</h1>
 						<Form.Item
-							name="email"
-							rules={[{ required: true, message: 'Please input your email!' }]}
+							name="usernameOrEmail"
+							rules={[{ required: true, message: 'Please input your username or email!' }]}
 						>
 							<Input 
-							    placeholder="Email"
+							    placeholder="Username or Email"
 								autoComplete="username"
 							    className={styles.input}
-								onChange={handleChange}
-								value={inputVal.email}
-								name="email"
+								onChange={handleInputChange}
+								value={inputVal.usernameOrEmail}
+								name="usernameOrEmail"
 								prefix={<UserOutlined/>}
 							/>
     					</Form.Item>
@@ -87,7 +82,7 @@ const Login = () => {
 						>
 						    <Input.Password
 							    placeholder="Password"
-								onChange={handleChange}
+								onChange={handleInputChange}
 							    className={styles.input}
 								value={inputVal.password}
 								name="password"
@@ -97,9 +92,9 @@ const Login = () => {
 						</Form.Item>
 						{error && <div className={styles.error_msg}>{error}</div>}
 						<Form.Item className={styles.remb_forg}>
-							{/* <Form.Item name="remember" valuePropName="checked" noStyle> */}
-								<Checkbox checked={remember} onChange={handleRememberChange}>Remember me</Checkbox> 
-							{/* </Form.Item> */}
+							<Form.Item name="remember" valuePropName="checked" noStyle>
+								<Checkbox name="remember" checked={inputVal.remember} onChange={handleInputChange}>Remember me</Checkbox> 
+							</Form.Item>
 							<Link to="/forgotPassword" className={styles.forgot}> 
 								Forgot password
 							</Link>

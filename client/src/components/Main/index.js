@@ -10,6 +10,7 @@ const Main = () => {
 	const { loadingData, setLoadingData } = useContext(LoadingContext);
     const [data, setData] = useState(false);
     const history = useNavigate();
+	console.log('data :>> ', data);
 	
     const handleLogout = async () => {
         let token = localStorage.getItem("userToken");

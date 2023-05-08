@@ -15,25 +15,32 @@ const Signup = () => {
     firstName: "",
     lastName: "",
     email: "",
+    username: "",
     password: "",
-    passwordConfirm: ""
+    passwordConfirm: "",
+    agreedToTerms: false
   };
 
-  const [data, setData] = useState(inputs);
+  const [inputVal, setInputVal] = useState(inputs);
   const [error, setError] = useState("");
   const [msg, setMsg] = useState("");
   const [form] = Form.useForm();
 
-  const handleChange = ({ currentTarget: input }) => {
-    setData({ ...data, [input.name]: input.value });
+  const handleInputChange = (e) => {
+    const { name, value, checked } = e.target;
+    
+    setInputVal({ ...inputVal, [name]: value ? value : checked });
   };
   
   const handleSubmit = async () => {
     try {
       const url = "http://localhost:8080/api/users/register";
-      const { data: res } = await axios.post(url, data);
-      setMsg(res.message);
-      // setData(inputs); // reset input fields to initial state
+      const res = await axios.post(url, inputVal);
+
+      const { message } = res.data;
+      
+      setMsg(message);
+    
       // Clear message after 3 seconds
       setTimeout(() => {
         setMsg("");
@@ -86,8 +93,8 @@ const Signup = () => {
                 placeholder="First Name"
                 prefix={<UserOutlined/>}
                 className={styles.input}
-                value={data.firstName}
-                onChange={handleChange}
+                value={inputVal.firstName}
+                onChange={handleInputChange}
               />
             </Form.Item>
             <Form.Item
@@ -102,8 +109,27 @@ const Signup = () => {
                 placeholder="Last Name"
                 prefix={<UserOutlined/>}
                 className={styles.input}
-                value={data.lastName}
-                onChange={handleChange}
+                value={inputVal.lastName}
+                onChange={handleInputChange}
+              />
+            </Form.Item>
+            <Form.Item
+              name="username"
+              rules={[
+                {
+                  required: true,
+                  message: 'Please input your Username!',
+                },
+              ]}
+            >
+              <Input 
+                name="username"
+                placeholder="Username"
+                autoComplete="username"
+                prefix={<UserOutlined/>}
+                className={styles.input}
+                value={inputVal.username}
+                onChange={handleInputChange}
               />
             </Form.Item>
             <Form.Item
@@ -125,8 +151,8 @@ const Signup = () => {
                 autoComplete="username"
                 prefix={<MailOutlined/>}
                 className={styles.input}
-                value={data.email}
-                onChange={handleChange}
+                value={inputVal.email}
+                onChange={handleInputChange}
               />
             </Form.Item>
             <Form.Item
@@ -145,8 +171,8 @@ const Signup = () => {
                 autoComplete="new-password"
                 prefix={<LockOutlined/>}
                 className={styles.input}
-                value={data.password}
-                onChange={handleChange}
+                value={inputVal.password}
+                onChange={handleInputChange}
               />
             </Form.Item>
             <Form.Item
@@ -174,12 +200,12 @@ const Signup = () => {
                 autoComplete="new-password"
                 prefix={<LockOutlined/>}
                 className={styles.input}
-                value={data.passwordConfirm}
-                onChange={handleChange}
+                value={inputVal.passwordConfirm}
+                onChange={handleInputChange}
               />
             </Form.Item>
             <Form.Item
-              name="agreement"
+              name="agreedToTerms"
               valuePropName="checked"
               rules={[
                 {
@@ -189,7 +215,7 @@ const Signup = () => {
               ]}
               {...tailFormItemLayout}
             >
-              <Checkbox>
+              <Checkbox name="agreedToTerms" checked={inputVal.agreedToTerms} onChange={handleInputChange}>
                 I accept the <Link to="#">Terms and Conditions!</Link>
               </Checkbox>
             </Form.Item>
@@ -201,7 +227,6 @@ const Signup = () => {
             )}
             <div className={styles.signup_buttons}>
               <Button 
-                // type="primary"
                 type="none"
                 htmlType="submit" 
                 icon={<LoginOutlined />}

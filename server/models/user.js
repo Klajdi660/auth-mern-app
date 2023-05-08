@@ -6,21 +6,21 @@ const userValidate = (data) => {
 		firstName: Joi.string().required().label("First Name"),
 		lastName: Joi.string().required().label("Last Name"),
 		email: Joi.string().email().required().label("Email"),
-		// username: Joi.string().required.label("Username"),
-		password: passwordComplexity().required().label("Password"),
-		passwordConfirm: passwordComplexity().required().label("Confirm Password"),
+		username: Joi.string().required().label("Username"),
+		password: passwordComplexity().min(8).required().label("Password"),
+		passwordConfirm: passwordComplexity().min(8).required().label("Confirm Password"),
 
 	});
 	return schema.validate(data);
 };
 
-const authValidate = (email, password) => {
+const authValidate = (data) => {
+	console.log('data :>> ', data);
 	const schema = Joi.object({
-		email: Joi.string().email().required().label("Email"),
+		usernameOrEmail: Joi.string().required().label("Username/Email"),
 		password: Joi.string().required().label("Password"),
-		// remember: Joi.boolean().optional().label("Remember"),
 	});
-	return schema.validate(email, password);
+	return schema.validate(data);
 };
 
 const authForgotPassword = (data) => {

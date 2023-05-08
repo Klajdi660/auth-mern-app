@@ -11,26 +11,27 @@ import Login from "./components/Login";
 import EmailVerify from "./components/EmailVerify";
 import ForgotPassword from "./components/ForgotPassword";
 import { AuthorizeUser } from "./middleware/auth";
+import { Paths } from "./common/paths";
 
 const router = createBrowserRouter([
   {
-    path: "/",
+    path: Paths.login,
     element: <Login/>
   },
   {
-    path: "/dash",
+    path: Paths.dashboard,
     element: <AuthorizeUser><Main/></AuthorizeUser>
   },
   {
-    path: "/register",
+    path: Paths.register,
     element: <Signup/>
   },
   {
-    path: "users/:id/verify",
+    path: Paths.emailVerify,
     element: <EmailVerify/>
   },
   {
-    path: "/forgotPassword",
+    path: Paths.forgotPassword,
     element: <ForgotPassword/>
   }
 ]);

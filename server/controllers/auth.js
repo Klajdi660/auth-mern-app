@@ -2,7 +2,7 @@ import bcrypt from "bcrypt";
 import jwt from "jsonwebtoken";
 import config from "config";
 import sendConfirmationEmail from "./mailer.js";
-import connection from "../models/db.js";
+import dbConnection from "../models/db.js";
 import { userModel } from "../models/user.js";
 import { tokenHelpers } from "../tokens/tokens.js";
 
@@ -12,16 +12,18 @@ const { createAccessToken, createRefreshToken, sendAccessToken, sendRefreshToken
 let tokens = [];
 
 const logIn = async (req, res) => {
-    const { email, password, remember } = req.body;
-    console.log('remember :>> ', remember);
-    // const { error } = userModel.authValidate(req.body);
+    const { usernameOrEmail, password, remember } = req.body;
+
+    const { error } = userModel.authValidate({ usernameOrEmail: usernameOrEmail, password: password });
     
-    // if (error) {
-    //   return res.status(400).send({ error: true, message: error.details[0].message });
-    // }
+    if (error) {
+      return res.status(400).send({ error: true, message: error.details[0].message });
+    }
 
     try {
-        connection.query( "SELECT * FROM register WHERE email = ?", [email], async (error, results) => {
+        const query = "SELECT * FROM register WHERE username = ? OR email = ?";
+        const values = [usernameOrEmail, usernameOrEmail];
+        dbConnection.query(query, values, async (error, results) => {
             if (error) {
                 return res.status(500).send({ error: true, message: "Error in querying the database" });
             }
@@ -29,20 +31,20 @@ const logIn = async (req, res) => {
             const user = results[0];
   
             if (!user) {
-                return res.status(401).send({ error: true, message: "Invalid Email or Password!" });
+                return res.status(401).send({ error: true, message: "Invalid username/Email or Password!" });
             }
   
             const validPassword = await bcrypt.compare(password, user.password);
   
             if (!validPassword) {
-                return res .status(401).send({ error: true, message: "Invalid Email or Password!" });
+                return res .status(401).send({ error: true, message: "Invalid username/Email or Password!" });
             }
 
             if (!user.verified) {
                 const url = `http://localhost:3000/users/${user.id}/verify`;
                 const subject = "Login email verification";
                 await sendConfirmationEmail({
-                    username: user.email,
+                    name: user.email,
                     subject: subject,
                     link: url,
                 });
@@ -80,13 +82,13 @@ const logIn = async (req, res) => {
             // };
           
             const cookieOptions = {
-                httpOnly: true
+                httpOnly: true,
+                expires: new Date(Date.now() + 30 * 24 * 60 * 60 * 1000) // cookie will expire in 30 days if "remember me" is checked
             };
         
-            if (remember) {
-                console.log('remember :>> ', remember);
-                cookieOptions.expires = new Date(Date.now() + 30 * 24 * 60 * 60 * 1000); // cookie will expire in 30 days if "remember me" is checked
-            }
+            // if (remember) {
+            //     cookieOptions.expires = new Date(Date.now() + 30 * 24 * 60 * 60 * 1000); // cookie will expire in 30 days if "remember me" is checked
+            // }
         
             res.cookie("userCookie", token, cookieOptions);
               
@@ -112,7 +114,7 @@ const logIn = async (req, res) => {
 //     }
 
 //     try {
-//         connection.query("SELECT * FROM register WHERE email=?", [email], async (error, results) => {
+//         dbConnection.query("SELECT * FROM register WHERE email=?", [email], async (error, results) => {
 //             if (error) {
 //                 return res.status(500).send({ error: true, message: "Error in querying the database"})
 //             }
@@ -130,7 +132,7 @@ const logIn = async (req, res) => {
 //                 expiresIn: jwtExpiresIn,
 //             });
             
-//             connection.query("UPDATE register SET tokens = ? WHERE id = ?", [
+//             dbConnection.query("UPDATE register SET tokens = ? WHERE id = ?", [
 //                 token,
 //                 user.id,
 //             ]);
@@ -158,11 +160,8 @@ const logIn = async (req, res) => {
 
 const logOut = async (req, res) => {
     const token = req.token;
-    console.log('token :>> ', token);
     tokens.push(token);
-    console.log('tokens :>> ', tokens); 
     tokens = tokens.filter((t) => t !== token)
-    console.log('tokensssss :>> ', tokens);
    
     try {
         res.clearCookie("userCookie", {

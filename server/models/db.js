@@ -3,7 +3,7 @@ import config from "config";
 
 const { HOST, USER, PASSWORD, DATABASE, WAIT_FOR_CONNECTIONS, CONNECTION_LIMIT } = config.get("dbConfig");
 
-const connection = mysql.createConnection({
+const dbConnection = mysql.createConnection({
     host: HOST,
     user: USER,
     password: PASSWORD,
@@ -14,4 +14,9 @@ const connection = mysql.createConnection({
     connectionLimit: CONNECTION_LIMIT,
 });
 
-export default connection;
+dbConnection.connect((error) => {
+    if (error) throw error;
+    console.log("Database connected successfully");
+});
+
+export default dbConnection;

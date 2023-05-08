@@ -1,36 +1,57 @@
 import { userModel } from "../models/user.js";
 import bcrypt from "bcrypt";
-import connection from "../models/db.js";
+import dbConnection from "../models/db.js";
 import sendConfirmationEmail from "./mailer.js";
 
 const usersRegister = async (req, res) => {
-    const { firstName, lastName, email, password, passwordConfirm } = req.body;
-    
-	const { error } = userModel.userValidate(req.body);
+    const { firstName, lastName, email, username, password, passwordConfirm, agreedToTerms } = req.body;
+   
+	const data = {
+		firstName: firstName,
+		lastName: lastName,
+		email: email,
+		username: username,
+		password: password,
+		passwordConfirm: passwordConfirm
+	}
+
+	const { error } = userModel.userValidate(data);
 	
 	if (error) {
 		return res.status(400).send({ error: true, message: error.details[0].message });
 	}
 
+    if (!agreedToTerms) {
+		return res.status(400).json({ error: true, message: "You must agree to the terms and conditions to register." });
+	}
+
 	try {
-		connection.query('SELECT * FROM register WHERE email = ?', [email], async (error, results) => {
+		dbConnection.query('SELECT * FROM register WHERE email = ? OR username = ?', [email, username], async (error, results) => {
 			if (error) {
 				console.error(error);
 				return res.status(500).send({ error: true, message: "Internal Server Error" });
 			}
 
 			if (results.length > 0) {
-				return res.status(400).send({ error: true, message: `User with this email "${email}" already exist. Please choose another email` });
+				const existingUser = results[0];
+				console.log('existingUser :>> ', existingUser);
+				if (existingUser.email === email) {
+                    return res.status(400).send({ error: true, message: `User with this email "${email}" already exists. Please choose another email` });
+                } else if (existingUser.username === username) {
+                    return res.status(400).send({ error: true, message: `User with this username "${username}" already exists. Please choose another username` });
+                }
+				// return res.status(400).send({ error: true, message: `User with this email "${email}" already exist. Please choose another email` });
 			} else if (password !== passwordConfirm) {
 				return res.status(400).send({ error: true, message: "Password and Confirm password not match"})
 			}
         
 			let hashPassword = await bcrypt.hash(password, 8);
 
-		    connection.query("INSERT INTO register SET ?", {
+		    dbConnection.query("INSERT INTO register SET ?", {
 				firstName: firstName,
 				lastName: lastName,
 				email: email,
+				username: username,
 			    password: hashPassword,
 				// password: password
 		    }, async (error, results) => {
@@ -40,7 +61,7 @@ const usersRegister = async (req, res) => {
 
 				const url = `http://localhost:3000/users/${results.insertId}/verify`;
 				const subject = "Verify email";
-				await sendConfirmationEmail({ username: `${firstName} ${lastName}`, subject: subject, link: url });
+				await sendConfirmationEmail({ name: `${firstName} ${lastName}`, subject: subject, link: url });
 		    });
 
 		    res
@@ -56,7 +77,7 @@ const userVerification = async (req, res) => {
     const { id } = req.params;
     
 	try {
-		connection.query(`SELECT * FROM register WHERE id = ?`, [id], (error, results) => {
+		dbConnection.query(`SELECT * FROM register WHERE id = ?`, [id], (error, results) => {
 			if (error) {
                 return res.status(500).send({ error: true, message: "Error in querying the database" });
             }
@@ -67,7 +88,7 @@ const userVerification = async (req, res) => {
 				return res.status(400).send({ error: true, message: "Invalid link" });
 			}
 	
-			connection.query(`UPDATE register SET verified = true WHERE id = ?`, [id], (error, results) => {
+			dbConnection.query(`UPDATE register SET verified = true WHERE id = ?`, [id], (error, results) => {
 					if (error) {
 						return res.status(500).send({ error: true, message: "Error in querying the database" });
 					}
