@@ -14,7 +14,7 @@ const Login = () => {
 	const [error, setError] = useState("");
 	const [form] = Form.useForm();
 	const history = useNavigate();
-    console.log('error :>> ', error);
+    
 	const handleInputChange = (e) => {
 		const { name, value, checked } = e.target;
 	

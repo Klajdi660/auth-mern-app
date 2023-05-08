@@ -34,13 +34,12 @@ const usersRegister = async (req, res) => {
 
 			if (results.length > 0) {
 				const existingUser = results[0];
-				console.log('existingUser :>> ', existingUser);
+
 				if (existingUser.email === email) {
                     return res.status(400).send({ error: true, message: `User with this email "${email}" already exists. Please choose another email` });
                 } else if (existingUser.username === username) {
                     return res.status(400).send({ error: true, message: `User with this username "${username}" already exists. Please choose another username` });
                 }
-				// return res.status(400).send({ error: true, message: `User with this email "${email}" already exist. Please choose another email` });
 			} else if (password !== passwordConfirm) {
 				return res.status(400).send({ error: true, message: "Password and Confirm password not match"})
 			}

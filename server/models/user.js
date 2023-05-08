@@ -15,7 +15,6 @@ const userValidate = (data) => {
 };
 
 const authValidate = (data) => {
-	console.log('data :>> ', data);
 	const schema = Joi.object({
 		usernameOrEmail: Joi.string().required().label("Username/Email"),
 		password: Joi.string().required().label("Password"),
