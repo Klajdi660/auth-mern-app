@@ -3,8 +3,8 @@ import axios from "axios";
 import styles from "./styles.module.css";
 import { useContext, useEffect, useState } from "react";
 import { LoadingContext } from "../../common/loadingContext";
-import { Avatar, Button, Space, Spin, ConfigProvider } from 'antd';
-import { UserOutlined, LogoutOutlined } from '@ant-design/icons';
+import { Button, Space, Spin, ConfigProvider } from 'antd';
+import { LogoutOutlined } from '@ant-design/icons';
 
 const Main = () => {
 	const { loadingData, setLoadingData } = useContext(LoadingContext);
