@@ -35,6 +35,7 @@ const router = createBrowserRouter([
     element: <ForgotPassword/>
   }
 ]);
+
 const App = () => {
   // const user = localStorage.getItem("userToken");
 

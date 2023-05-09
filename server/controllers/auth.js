@@ -23,6 +23,7 @@ const logIn = async (req, res) => {
     try {
         const query = "SELECT * FROM register WHERE username = ? OR email = ?";
         const values = [usernameOrEmail, usernameOrEmail];
+        
         dbConnection.query(query, values, async (error, results) => {
             if (error) {
                 return res.status(500).send({ error: true, message: "Error in querying the database" });
@@ -44,12 +45,12 @@ const logIn = async (req, res) => {
                 const url = `http://localhost:3000/users/${user.id}/verify`;
                 const subject = "Login email verification";
                 await sendConfirmationEmail({
-                    name: user.email,
+                    name: usernameOrEmail,
                     subject: subject,
                     link: url,
                 });
 
-                return res.status(401).send({ error: true, message: `Email ${user.email} not verified. A verification email has been sent. Please check your inbox.` });
+                return res.status(401).send({ error: true, message: `Email ${usernameOrEmail} not verified. A verification email has been sent. Please check your inbox.` });
             }
           
             const id = user.id;
@@ -179,7 +180,7 @@ const validUser = async (req, res) => {
     const userId = req.userId;
     
     try {
-        connection.query(`SELECT * FROM register WHERE id = ${userId}`, (error, result) => {
+        dbConnection.query(`SELECT * FROM register WHERE id = ${userId}`, (error, result) => {
             const user = result[0];
 
             if (error) {

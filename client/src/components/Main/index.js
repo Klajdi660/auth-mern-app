@@ -69,8 +69,7 @@ const Main = () => {
 	    // eslint-disable-next-line react-hooks/exhaustive-deps
 	}, []);
 
-	const email = loadingData?.validUser?.email;
-	console.log('email :>> ', email);
+	const username = loadingData?.validUser?.username;
 
 	return (
 		<>
@@ -96,7 +95,7 @@ const Main = () => {
 							</Space> */}
 						</div>
 						<div className={styles.content}>
-							Welcome <p style={{ color: "blue", fontWeight: "bold", margin:"0 10px"}}>{email}</p> in HP Cloud 
+							Welcome <p style={{ color: "blue", fontWeight: "bold", margin:"0 10px"}}>{username}</p> in HP Cloud 
 						</div>
 					</div>
 				: 

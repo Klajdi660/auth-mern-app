@@ -2,6 +2,7 @@ import { useState } from "react";
 import axios from "axios";
 import styles from "./styles.module.css";
 import { Button, Form, Input } from 'antd';
+import OtpInput from "react18-input-otp";
 import { MailOutlined } from '@ant-design/icons';
 
 const ForgotPassword = () => {
@@ -9,6 +10,8 @@ const ForgotPassword = () => {
 	const [data, setData] = useState(inputs);
 	const [error, setError] = useState("");
 	const [form] = Form.useForm();
+	const [otp, setOtp] = useState("");
+
 
 	const handleChange = ({ currentTarget: input }) => {
 		setData({ ...data, [input.name]: input.value });
@@ -48,17 +51,27 @@ const ForgotPassword = () => {
 					>
 						<h1>Enter Your Email</h1>
 						<Form.Item
-							name="email"
-							rules={[{ required: true, message: 'Please input your email!' }]}
+							// name="email"
+							// rules={[{ required: true, message: 'Please input your email!' }]}
 						>
-							<Input
+							{/* <Input
 							    placeholder="Email"
 							    className={styles.input}
 								onChange={handleChange}
 								value={data.email}
 								name="email"
 								prefix={<MailOutlined/>}
-							/>
+							/> */}
+							<OtpInput
+								value={otp}
+								onChange={setOtp}
+								numInputs={6}
+								otpType="number"
+								disabled={false}
+								autoFocus
+								// className={styles.input}
+								className={styles.otp}
+                			></OtpInput>
     					</Form.Item>
 						{error && <div className={styles.error_msg}>{error}</div>}
 						<Form.Item className={styles.buttons}>
