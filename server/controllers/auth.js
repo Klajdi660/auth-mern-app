@@ -5,6 +5,7 @@ import sendConfirmationEmail from "./mailer.js";
 import dbConnection from "../models/db.js";
 import { userModel } from "../models/user.js";
 import { tokenHelpers } from "../tokens/tokens.js";
+import otpGenerator from "otp-generator";
 
 const {  ACCESS_TOKEN_SECRET, JWT_EXPIRES_IN, JWT_COOKIE_EXPIRES } = config.get("tokenConfig");
 const { createAccessToken, createRefreshToken, sendAccessToken, sendRefreshToken } = tokenHelpers;
@@ -23,8 +24,11 @@ const logIn = async (req, res) => {
     try {
         const query = "SELECT * FROM register WHERE username = ? OR email = ?";
         const values = [usernameOrEmail, usernameOrEmail];
+        console.log('values111 :>> ', values);
         
         dbConnection.query(query, values, async (error, results) => {
+            console.log('results111 :>> ', results);
+           
             if (error) {
                 return res.status(500).send({ error: true, message: "Error in querying the database" });
             }
@@ -190,8 +194,13 @@ const validUser = async (req, res) => {
             }
         });
     } catch (error) {
-        res.status(401).send({ status: 401, error: true, message: "Internal server error"});
+        res.status(401).send({ status: 401, error: true, message: "Internal server error" });
     }
 };
 
-export const authController = { logIn, validUser, logOut };
+const generateOTP = async (req, res) => {
+    req.app.locals.OTP = await otpGenerator.generate(6, { lowerCaseAlphabets: false, upperCaseAlphabets: false, specialChars: false})
+    res.status(201).send({ code: req.app.locals.OTP })
+};
+
+export const authController = { logIn, validUser, logOut, generateOTP };

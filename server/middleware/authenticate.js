@@ -54,19 +54,25 @@ export const localVariables = (req, res, next ) => {
     next();
 };
 
-export const verifyUser = async (req, res, next) => {
-    try {
-        const { username } = req.method == 'GET' ? req.query : req.body;
+// export const verifyUser = async (req, res, next) => {
+//     console.log('req.body :>> ', req.body);
+//     try {
+//         const { usernameOrEmail } = req.method == 'GET' ? req.query : req.body;
+//         console.log('usernameOrEmail :>> ', usernameOrEmail);
 
-        // check the user existence
-        dbConnection.query('SELECT * FROM register WHERE email = ?', [username], (error, results) => {
-            if (results.length === 0) {
-                return res.status(404).send({ error: true, message: "Can't find user!" });
-            }
+//         const query = "SELECT * FROM register WHERE username = ? OR email = ?";
+//         const values = [usernameOrEmail, usernameOrEmail];
+//         console.log('values :>> ', values);
+//         // check the user existence
+//         dbConnection.query(query, [values], (error, results) => {
+//             // if (results.length === 0) {
+//             //     return res.status(404).send({ error: true, message: "Can't find user!" });
+//             // }
+//             console.log('results :>> ', results);
 
-            next();
-        });
-    } catch (error) {
-        return res.status(500).send({ error: true, message: "Authentication Error" });
-    }
-};
+//             next();
+//         });
+//     } catch (error) {
+//         return res.status(500).send({ error: true, message: "Authentication Error" });
+//     }
+// };

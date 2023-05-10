@@ -1,8 +1,8 @@
 import express from "express";
 import { authController } from "../controllers/auth.js";
 import authenticate from "../middleware/authenticate.js";
-
-const { logIn, validUser, logOut } = authController;
+// import { verifyUser } from "../middleware/authenticate.js";
+const { logIn, validUser, logOut, generateOTP } = authController;
 
 const router = express.Router();
 
@@ -17,5 +17,7 @@ router.get("/validUser", authenticate, validUser);
 
 // user Logout
 router.get("/logout", authenticate, logOut);
+
+router.get("/generateOTP", generateOTP);
 
 export default router;

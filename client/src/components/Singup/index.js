@@ -83,10 +83,10 @@ const Signup = () => {
             <h1>Create Account</h1>
             <Form.Item
               name="firstName"
-              // rules={[{
-              //   required: true,
-              //   message: 'Please input your First name',
-              // }]}
+              rules={[{
+                required: true,
+                message: 'Please input your First name',
+              }]}
             >
               <Input
                 name="firstName"
@@ -99,10 +99,10 @@ const Signup = () => {
             </Form.Item>
             <Form.Item
               name="lastName"
-              // rules={[{
-              //   required: true,
-              //   message: 'Please input your Last name',
-              // }]}
+              rules={[{
+                required: true,
+                message: 'Please input your Last name',
+              }]}
             >
               <Input
                 name="lastName"
@@ -115,12 +115,12 @@ const Signup = () => {
             </Form.Item>
             <Form.Item
               name="username"
-              // rules={[
-              //   {
-              //     required: true,
-              //     message: 'Please input your Username!',
-              //   },
-              // ]}
+              rules={[
+                {
+                  required: true,
+                  message: 'Please input your Username!',
+                },
+              ]}
             >
               <Input 
                 name="username"
@@ -134,16 +134,16 @@ const Signup = () => {
             </Form.Item>
             <Form.Item
               name="email"
-              // rules={[
-              //   {
-              //     type: 'email',
-              //     message: 'The input is not valid E-mail!',
-              //   },
-              //   {
-              //     required: true,
-              //     message: 'Please input your E-mail!',
-              //   },
-              // ]}
+              rules={[
+                {
+                  type: 'email',
+                  message: 'The input is not valid E-mail!',
+                },
+                {
+                  required: true,
+                  message: 'Please input your E-mail!',
+                },
+              ]}
             >
               <Input 
                 name="email"
@@ -157,12 +157,12 @@ const Signup = () => {
             </Form.Item>
             <Form.Item
               name="password"
-              // rules={[
-              //   {
-              //     required: true,
-              //     message: 'Please input your password!',
-              //   },
-              // ]}
+              rules={[
+                {
+                  required: true,
+                  message: 'Please input your password!',
+                },
+              ]}
               // hasFeedback
             >
               <Input.Password 
@@ -179,20 +179,20 @@ const Signup = () => {
               name="confirmPassword"
               dependencies={['password']}
               // hasFeedback
-              // rules={[
-              //   {
-              //     required: true,
-              //     message: 'Please confirm your password!',
-              //   },
-              //   ({ getFieldValue }) => ({
-              //     validator(_, value) {
-              //       if (!value || getFieldValue('password') === value) {
-              //         return Promise.resolve();
-              //       }
-              //       return Promise.reject(new Error('The two passwords that you entered do not match!'));
-              //     },
-              //   }),
-              // ]}
+              rules={[
+                {
+                  required: true,
+                  message: 'Please confirm your password!',
+                },
+                ({ getFieldValue }) => ({
+                  validator(_, value) {
+                    if (!value || getFieldValue('password') === value) {
+                      return Promise.resolve();
+                    }
+                    return Promise.reject(new Error('The two passwords that you entered do not match!'));
+                  },
+                }),
+              ]}
             >
               <Input.Password 
                 name="passwordConfirm"
