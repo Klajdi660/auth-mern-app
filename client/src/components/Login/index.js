@@ -13,7 +13,7 @@ const Login = () => {
 	});
 	const [error, setError] = useState("");
 	const [form] = Form.useForm();
-	const history = useNavigate();
+	const navigate = useNavigate();
     
 	const handleInputChange = (e) => {
 		const { name, value, checked } = e.target;
@@ -33,7 +33,7 @@ const Login = () => {
 			if (status === 201) {
 				localStorage.setItem("userToken", result.token);
 				// window.location = "/dash";
-				history("/dash")
+				navigate("/dash")
 				// setInputVal({...inputVal, email: "", password: ""});
 			}
 		} catch (error) {

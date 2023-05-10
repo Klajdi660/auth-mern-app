@@ -3,6 +3,8 @@ import { useParams, Link } from "react-router-dom";
 import axios from "axios";
 import success from "../../images/success.png";
 import styles from "./styles.module.css";
+import { Button } from "antd";
+import { LoginOutlined } from "@ant-design/icons";
 
 const EmailVerify = () => {
 	const [validUrl, setValidUrl] = useState(true);
@@ -26,10 +28,18 @@ const EmailVerify = () => {
 		<div>
 			{validUrl ? (
 				<div className={styles.container}>
-					<img src={success} alt="success_img" className={styles.success_img} />
+					{/* <img src={success} alt="success_img" className={styles.success_img} /> */}
+					<img src={success} alt="success_img"/>
 					<h1>Email verified successfully</h1>
-					<Link to="/">
-						<button className={styles.green_btn}>Login</button>
+					<Link to="/" className={styles.buttons}>
+						<Button 
+						    type="none"
+							htmlType="submit"
+							icon={<LoginOutlined />}
+							className={styles.green_btn}
+						>
+							Login
+						</Button>
 					</Link>
 				</div>
 			) : (
