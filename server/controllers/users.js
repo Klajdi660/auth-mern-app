@@ -2,6 +2,7 @@ import { userModel } from "../models/user.js";
 import bcrypt from "bcrypt";
 import dbConnection from "../models/db.js";
 import sendConfirmationEmail from "./mailer.js";
+import crypto from "crypto";
 
 const usersRegister = async (req, res) => {
     const { firstName, lastName, email, username, password, passwordConfirm, agreedToTerms } = req.body;
@@ -26,7 +27,10 @@ const usersRegister = async (req, res) => {
 	}
 
 	try {
-		dbConnection.query('SELECT * FROM register WHERE email = ? OR username = ?', [email, username], async (error, results) => {
+		let selectQuery = 'SELECT * FROM register WHERE email = ? OR username = ?';
+		let selectValues = [email, username];
+
+		dbConnection.query(selectQuery, selectValues, async (error, results) => {
 			if (error) {
 				console.error(error);
 				return res.status(500).send({ error: true, message: "Internal Server Error" });
@@ -43,20 +47,24 @@ const usersRegister = async (req, res) => {
 			} else if (password !== passwordConfirm) {
 				return res.status(400).send({ error: true, message: "Password and Confirm password not match"})
 			}
-        
-			let hashPassword = await bcrypt.hash(password, 8);
 
-		    dbConnection.query("INSERT INTO register SET ?", {
+			let hashPassword = await bcrypt.hash(password, 8);
+			let insertQuery = "INSERT INTO register SET ?";
+			let insrValues = {
 				firstName: firstName,
 				lastName: lastName,
 				email: email,
 				username: username,
 			    password: hashPassword,
 				// password: password
-		    }, async (error, results) => {
+			};
+
+		    dbConnection.query(insertQuery, insrValues, async (error, results) => {
 				if (error) {
 					return res.status(500).send({ error: true, message: "Error in querying the database" });
 				}
+     
+				const hash = crypto.createHash("sha1").update(username + results.insertId).digest("hex");
 
 				const url = `http://localhost:3000/users/${results.insertId}/verify`;
 				const subject = "Verify email";
@@ -76,7 +84,9 @@ const userVerification = async (req, res) => {
     const { id } = req.params;
     
 	try {
-		dbConnection.query(`SELECT * FROM register WHERE id = ?`, [id], (error, results) => {
+		let selectQuery = `SELECT * FROM register WHERE id = ?`;
+
+		dbConnection.query(selectQuery, [id], (error, results) => {
 			if (error) {
                 return res.status(500).send({ error: true, message: "Error in querying the database" });
             }
@@ -86,8 +96,10 @@ const userVerification = async (req, res) => {
 			if (!user) {
 				return res.status(400).send({ error: true, message: "Invalid link" });
 			}
+
+			let insertQuery = `UPDATE register SET verified = true WHERE id = ?`;
 	
-			dbConnection.query(`UPDATE register SET verified = true WHERE id = ?`, [id], (error, results) => {
+			dbConnection.query(insertQuery, [id], (error, results) => {
 					if (error) {
 						return res.status(500).send({ error: true, message: "Error in querying the database" });
 					}

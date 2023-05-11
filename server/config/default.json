@@ -5,7 +5,7 @@
   "tokenConfig": {
     "ACCESS_TOKEN_SECRET": "Klajdi96@",
     "REFRESH_TOKEN_SECRET": "Klajdi1996@",
-    "JWT_EXPIRES_IN": "24h",
+    "JWT_EXPIRES_IN": "15m",
     "JWT_COOKIE_EXPIRES": "2d"
   },
   "dbConfig": {
