@@ -14,9 +14,9 @@ const dbConnection = mysql.createConnection({
     connectionLimit: CONNECTION_LIMIT,
 });
 
-dbConnection.connect((error) => {
-    if (error) throw error;
-    console.log("Database connected successfully");
-});
+// dbConnection.connect((error) => {
+//     if (error) throw error;
+//     console.log("Database connected successfully");
+// });
 
 export default dbConnection;
