@@ -1,7 +1,7 @@
 import {
-//   Route,
-//   Routes,
-//   Navigate,
+  //   Route,
+  //   Routes,
+  //   Navigate,
   createBrowserRouter,
   RouterProvider,
 } from "react-router-dom";
@@ -12,6 +12,7 @@ import EmailVerify from "./components/EmailVerify";
 import ForgotPassword from "./components/ForgotPassword";
 import { AuthorizeUser } from "./middleware/auth";
 import { Paths } from "./common/paths";
+import Error from "./components/Error";
 
 const router = createBrowserRouter([
   {
@@ -33,6 +34,10 @@ const router = createBrowserRouter([
   {
     path: Paths.forgotPassword,
     element: <ForgotPassword/>
+  },
+  {
+    path: Paths.error,
+    element: <Error/>
   }
 ]);
 

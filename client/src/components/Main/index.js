@@ -73,45 +73,43 @@ const Main = () => {
 
 	return (
 		<>
-	 	    {
-				data ? 
-					<div className={styles.main_container}>
-						<div className={styles.navbar}>
-							<Link to="/dash" style={{ textDecoration: "none" }} className={styles.logo}>
-								{/* <h1>HP Cloud</h1> */}
-								HP Cloud
-							</Link>
-							<Button 
-							    type="none"
-								htmlType="submit"
-							    className={styles.white_btn} 
-								onClick={handleLogout}
-								icon={<LogoutOutlined />}
-							>
-								Logout
-							</Button>
-							{/* <Space className={styles.white_btn}>
-							    <Avatar size="large" icon={<UserOutlined />}/>
-							</Space> */}
-						</div>
-						<div className={styles.content}>
-							Welcome <p style={{ color: "blue", fontWeight: "bold", margin:"0 10px"}}>{username}</p> in HP Cloud 
-						</div>
+	 	    {data ? (
+				<div className={styles.main_container}>
+					<div className={styles.navbar}>
+						<Link to="/dash" style={{ textDecoration: "none" }} className={styles.logo}>
+							HP Cloud
+						</Link>
+						<Button 
+							type="none"
+							htmlType="submit"
+							className={styles.white_btn} 
+							onClick={handleLogout}
+							icon={<LogoutOutlined />}
+						>
+							Logout
+						</Button>
 					</div>
-				: 
+					<div className={styles.content}>
+						Welcome <p className={styles.content_msg}>{username}</p> in HP Cloud 
+					</div>
+				</div>
+			) : (  
 				<Space className={styles.loading}>   
 				    <ConfigProvider
 						theme={{
 							token: {
-								// colorPrimary: '#2a4365',
 								colorPrimary: "#1a365d"
 							},
 						}}
 					>
-						<Spin tip="Loading" size="large" style={{ fontWeight: "bold" }}></Spin>
+						<Spin 
+							tip="Loading" 
+							size="large" 
+							style={{ fontWeight: "bold" }}
+						/>
 					</ConfigProvider>
 			    </Space>
-			}
+			)}
 		</>
 	);
 };

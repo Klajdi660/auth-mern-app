@@ -3,5 +3,6 @@ export const Paths = {
     dashboard: "/dash",
     register: "/register",
     emailVerify: "users/:id/verify",
-    forgotPassword: "/forgotPassword"
+    forgotPassword: "/forgotPassword",
+    error: "/error"
 };

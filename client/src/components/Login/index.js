@@ -102,7 +102,6 @@ const Login = () => {
 						<div className={styles.buttons}>
 							<Button
 								className={styles.green_btn}
-								// type="primary"
 								type="none"
 								htmlType="submit"
 								icon={<LoginOutlined/>}

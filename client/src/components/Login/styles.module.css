@@ -2,7 +2,6 @@
 	width: 100%;
 	min-height: 100vh;
 	max-width: 550px;
-	/* background-color: #f5f5f5; */
 	display: flex;
 	margin: 0 auto;
 	align-items: center;
@@ -14,10 +13,7 @@
 	height: 500px;
 	display: flex;
 	border-radius: 10px;
-	/* box-shadow: 0px 3px 3px -2px rgb(0 0 0 / 20%),
-		0px 3px 4px 0px rgb(0 0 0 / 14%), 0px 1px 8px 0px rgb(0 0 0 / 12%); */
-		box-shadow: 0 0 15px -10px #2d3748;
-
+	box-shadow: 0 0 15px -10px #2d3748;
 }
 
 .left {
@@ -37,7 +33,6 @@
 }
 
 .form_container h1 {
-	/* font-size: 40px; */
 	margin-top: 0;
 	font-size: 34px;
     color: #2a4365;
@@ -51,8 +46,6 @@
 	margin: 5px 0;
 	font-size: 14px;
 }
-
-
 
 .error_msg {
 	width: 370px;
@@ -70,6 +63,7 @@
 	background: #1a365d;
 	color: #fff;
 }
+
 .green_btn:hover {
 	background-color: #97a1b1;
 }
@@ -82,18 +76,13 @@
 }
 
 .reg_link {
-	/* display: flex;
-	align-items: center;
-	justify-content: center; */
 	margin-top: 8px;
 }
 
 .remb_forg {
-	/* width: 370px; */
 	width: 360px;
 }
 
 .forgot {
 	float: right;
-	/* color: #1a365d; */
 }

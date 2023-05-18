@@ -56,37 +56,13 @@ const logIn = async (req, res) => {
             }
           
             const id = user.id;
-
-            // // 3. Create Refresh- and Accesstoken
-            // const accessToken = createAccessToken(user.id);
-            
-            // const refreshToken = createRefreshToken(user.id);
-            
-            // // 4. Store Refreshtoken with user in "db"
-            // // Could also use different version numbers instead.
-            // // Then just increase the version number on the revoke endpoint
-            // user.refreshToken = refreshToken;
-        
-            // // 5. Send token. Refreshtoken as a cookie and accesstoken as a regular response
-            // sendRefreshToken(res, refreshToken);
-            // sendAccessToken(res, req, accessToken);
           
             const token = jwt.sign({ id },  ACCESS_TOKEN_SECRET, {
-                // expiresIn: "2d"
                 expiresIn: JWT_EXPIRES_IN
             });
             
-            // const cookieOptions = {
-            //     // expires: new Date(
-            //     //     Date.now() + jwtCookieExpires * 24 * 60 * 60 * 1000
-            //     // ),
-            //     expires: remember ? new Date(Date.now() + 30 * 24 * 60 * 60 * 1000) : new Date(Date.now() + 9000000),
-            //     httpOnly: true
-            // };
-          
             const cookieOptions = {
                 httpOnly: true,
-                // expires: new Date(Date.now() + 30 * 24 * 60 * 60 * 1000)
                 expiresIn: JWT_COOKIE_EXPIRES
             };
         
@@ -112,8 +88,11 @@ const logIn = async (req, res) => {
 
 const logOut = async (req, res) => {
     const token = req.token;
-    tokens.push(token);
-    tokens = tokens.filter((t) => t !== token)
+    // tokens.push(token);
+    // tokens = tokens.filter((t) => t !== token);
+
+    const userId = req.user.id;
+    console.log('userId :>> ', userId);
    
     try {
         res.clearCookie("userCookie", {

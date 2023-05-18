@@ -1,1 +1,0 @@
-# auth-mern-app

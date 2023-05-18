@@ -8,7 +8,6 @@ const authenticate = async (req, res, next) => {
     const authHeader = req.headers.authorization;
 
     try {
-        // const token = req.headers.authorization;
         const token = authHeader.split(' ')[1];
 
         const verifyToken = jwt.verify(token,  ACCESS_TOKEN_SECRET);
@@ -30,8 +29,6 @@ const authenticate = async (req, res, next) => {
             next();
         });
     } catch (error) {
-        // console.error(error);
-        // res.status(401).send({ error: true, message: "Unauthorized: No token provided" });
         if (error.name === "JsonWebTokenError") {
             return res.status(401).send({ error: true, message: "Unauthorized access"});
         }
@@ -55,20 +52,17 @@ export const localVariables = (req, res, next ) => {
 };
 
 // export const verifyUser = async (req, res, next) => {
-//     console.log('req.body :>> ', req.body);
 //     try {
 //         const { usernameOrEmail } = req.method == 'GET' ? req.query : req.body;
-//         console.log('usernameOrEmail :>> ', usernameOrEmail);
 
 //         const query = "SELECT * FROM register WHERE username = ? OR email = ?";
 //         const values = [usernameOrEmail, usernameOrEmail];
-//         console.log('values :>> ', values);
+
 //         // check the user existence
 //         dbConnection.query(query, [values], (error, results) => {
 //             // if (results.length === 0) {
 //             //     return res.status(404).send({ error: true, message: "Can't find user!" });
 //             // }
-//             console.log('results :>> ', results);
 
 //             next();
 //         });

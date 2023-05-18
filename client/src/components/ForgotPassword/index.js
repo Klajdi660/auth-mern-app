@@ -4,7 +4,7 @@ import styles from "./styles.module.css";
 import { Button, Form, Input } from 'antd';
 import OtpInput from "react18-input-otp";
 import { Link } from "react-router-dom";
-import { MailOutlined } from '@ant-design/icons';
+// import { MailOutlined } from '@ant-design/icons';
 
 const ForgotPassword = () => {
 	const inputs = { email: "" };
@@ -45,7 +45,7 @@ const ForgotPassword = () => {
 	return (
 		<div className={styles.login_container}>
 			<div className={styles.login_form_container}>
-				<div className={styles.left}>
+				<div className={styles.form}>
 					<Form 
 						className={styles.form_container} 
 						form={form}
