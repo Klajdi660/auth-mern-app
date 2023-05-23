@@ -4,7 +4,7 @@ export const AuthorizeUser = ({ children }) => {
     const token = localStorage.getItem("userToken");
 
     if (!token) {
-        return <Navigate to={"/"} replace={true}></Navigate>
+        return <Navigate to={"/"} replace/>
     }
 
     return children;
