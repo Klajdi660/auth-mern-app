@@ -10,7 +10,7 @@ const Main = () => {
 	const { loadingData, setLoadingData } = useContext(LoadingContext);
     const [data, setData] = useState(false);
     const history = useNavigate();
-	
+
     const handleLogout = async () => {
         let token = localStorage.getItem("userToken");
 	
@@ -52,7 +52,7 @@ const Main = () => {
 		});
 
 		const data = res.data;
-
+		console.log('data :>> ', data);
 		if (data.status === 401 || !data) {
 			history("*");
 		} else {

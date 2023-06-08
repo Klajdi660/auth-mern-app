@@ -1,7 +1,7 @@
 import mysql from "mysql";
 import config from "config";
 
-const { HOST, USER, PASSWORD, DATABASE, WAIT_FOR_CONNECTIONS, CONNECTION_LIMIT } = config.get("dbConfig");
+const { HOST, USER, PASSWORD, DATABASE, WAIT_FOR_CONNECTIONS, CONNECTION_LIMIT } = config.get("db");
 
 const dbConnection = mysql.createConnection({
     host: HOST,

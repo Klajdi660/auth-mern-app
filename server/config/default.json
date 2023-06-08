@@ -1,27 +1,27 @@
 {
   "app": {
-    "PORT": 8080
+    "port": 8080,
+    "prefix": "/api"
   },
-  "tokenConfig": {
-    "ACCESS_TOKEN_SECRET": "Klajdi96@",
-    "REFRESH_TOKEN_SECRET": "Klajdi1996@",
-    "JWT_EXPIRES_IN": "15m",
-    "JWT_COOKIE_EXPIRES": "2d"
+  "cors": {
+    "cors_url": "http://localhost:3000"
   },
-  "dbConfig": {
-    "HOST": "localhost",
-    "USER": "root",
-    "PASSWORD": "Klajdi1996",
-    "DATABASE": "node-reg",
-    "WAIT_FOR_CONNECTIONS": true,
-    "CONNECTION_LIMIT": 10
+  "jwt": {
+    "access_token_secret": "Klajdi96@",
+    "jwt_expires_in": "15m",
+    "jwt_cookie_expires": "2d"
   },
-  "mailerConfig": {
-    "SERVICE": "gmail",
-    "HOST": "smtp.gmail.com",
-    "PORT": 587,
-    "SECURE": false,
-    "EMAIL": "klajdixhafkollari36@gmail.com",
-    "PASSWORD": "qejogblzqwvvimac"
+  "db": {
+    "host": "localhost",
+    "user": "root",
+    "password": "Klajdi1996",
+    "database": "node-reg"
+  },
+  "mailer": {
+    "service": "gmail",
+    "host": "smtp.gmail.com",
+    "port": 587,
+    "email": "klajdixhafkollari36@gmail.com",
+    "password": "qejogblzqwvvimac"
   }
 }

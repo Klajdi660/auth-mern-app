@@ -23,13 +23,13 @@ const Login = () => {
 
 	const handleSubmit = async () => {
 		try {
-			const url = "http://localhost:8080/api/auth";
+			const url = "http://localhost:8080/api/auth/login";
 			const res = await axios.post(url, inputVal, { 
 				withCredentials: true 
 			});
 			
-			const {status, result } = res.data;
-
+			const { status, result } = res.data;
+			
 			if (status === 201) {
 				localStorage.setItem("userToken", result.token);
 				// window.location = "/dash";

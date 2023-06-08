@@ -1,7 +1,7 @@
 import config from "config";
 import { createTransport } from "nodemailer";
 
-const { SERVICE, HOST, PORT, SECURE, EMAIL, PASSWORD } = config.get("mailerConfig");
+const { SERVICE, HOST, PORT, SECURE, EMAIL, PASSWORD } = config.get("mailer");
 
 let nodeConfig = {
   service: SERVICE,

@@ -1,8 +1,8 @@
 import jwt from "jsonwebtoken";
-import dbConnection from "../models/db.js";
 import config from "config";
+import dbConnection from "../helpers/db.js";
 
-const {  ACCESS_TOKEN_SECRET } = config.get("jwt");
+const { access_token_secret } = config.get("jwt");
 
 const authenticate = async (req, res, next) => {
     const authHeader = req.headers.authorization;
@@ -10,7 +10,7 @@ const authenticate = async (req, res, next) => {
     try {
         const token = authHeader.split(' ')[1];
 
-        const verifyToken = jwt.verify(token,  ACCESS_TOKEN_SECRET);
+        const verifyToken = jwt.verify(token, access_token_secret);
         
         dbConnection.query("SELECT * FROM register WHERE id = ?", [verifyToken.id], (error, result) => {
             if (error) {
@@ -26,6 +26,7 @@ const authenticate = async (req, res, next) => {
             req.token = token;
             req.user = user;
             req.userId = user.id;
+            req.query = user.id
             next();
         });
     } catch (error) {
@@ -43,13 +44,13 @@ const authenticate = async (req, res, next) => {
 
 export default authenticate;
 
-export const localVariables = (req, res, next ) => {
-    req.app.locals = {
-        OTP: null,
-        resetSession: false
-    }
-    next();
-};
+// export const localVariables = (req, res, next ) => {
+//     req.app.locals = {
+//         OTP: null,
+//         resetSession: false
+//     }
+//     next();
+// };
 
 // export const verifyUser = async (req, res, next) => {
 //     try {

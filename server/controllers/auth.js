@@ -10,7 +10,7 @@ import otpGenerator from "otp-generator";
 const {  ACCESS_TOKEN_SECRET, JWT_EXPIRES_IN, JWT_COOKIE_EXPIRES } = config.get("tokenConfig");
 // const { createAccessToken, createRefreshToken, sendAccessToken, sendRefreshToken } = tokenHelpers;
 
-let tokens = [];
+// let tokens = [];
 
 const logIn = async (req, res) => {
     const { usernameOrEmail, password, remember } = req.body;
@@ -87,12 +87,12 @@ const logIn = async (req, res) => {
 };
 
 const logOut = async (req, res) => {
-    const token = req.token;
+    // const token = req.token;
     // tokens.push(token);
     // tokens = tokens.filter((t) => t !== token);
 
-    const userId = req.user.id;
-    console.log('userId :>> ', userId);
+    // const userId = req.user.id;
+    // console.log('userId :>> ', userId);
    
     try {
         res.clearCookie("userCookie", {
