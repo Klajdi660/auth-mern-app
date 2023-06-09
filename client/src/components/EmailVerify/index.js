@@ -9,16 +9,17 @@ import Error from "../Error";
 
 const EmailVerify = () => {
 	const [validUrl, setValidUrl] = useState(true);
+	// const { id, token } = useParams();
 	const param = useParams();
-  
+
 	useEffect(() => {
 		const verifyEmailUrl = async () => {
 			try {
-				const url = `http://localhost:8080/api/users/${param.id}/verify?token=${param.token}`;
+				const url = `http://localhost:8080/api/user/${param.id}/verify`;
 				await axios.get(url);
 				setValidUrl(true);
 			} catch (error) {
-				console.log(error);
+				console.log(`Error: ${error}`);
 				setValidUrl(false);
 			}
 		};
@@ -27,7 +28,7 @@ const EmailVerify = () => {
 
 	return (
 		<>
-			{validUrl && param.token ? (
+			{validUrl ? (
 				<div className={styles.verify_container}>
 					<img src={success} alt="success_img"/>
 					<h1>Email verified successfully</h1>

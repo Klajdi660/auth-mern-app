@@ -6,7 +6,7 @@ import dbConnection from "../models/db.js";
 import sendConfirmationEmail from "./mailer.js";
 import { userModel } from "../models/user.js";
 
-const {  ACCESS_TOKEN_SECRET } = config.get("tokenConfig");
+const {  ACCESS_TOKEN_SECRET } = config.get("jwt");
 
 const usersRegister = async (req, res) => {
     const { firstName, lastName, email, username, password, passwordConfirm, agreedToTerms } = req.body;

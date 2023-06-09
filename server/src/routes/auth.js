@@ -4,7 +4,7 @@ import { validation } from "../helpers/validation.js";
 import authenticate from "../middleware/authenticate.js";
 
 const { authValidate } = validation;
-const { login, validUser } = authService;
+const { login, validUser, logOut, generateOTP } = authService;
 
 const router = express.Router();
 
@@ -26,7 +26,7 @@ router.post("/login", async (req, res) => {
         return;
     }
 
-    const { token, cookieOptions } = response.result;
+    const { token, cookieOptions } = response.data;
 
     res
         .status(200)
@@ -43,7 +43,7 @@ router.get("/validUser", authenticate, async (req, res) => {
 
     if (response.error) {
         console.error(`Error Login: ${response.message}`);
-        res.status(500).json({ error: true, message: response.message });
+        res.status(500).json({ status: 500, error: true, message: response.message });
         return;
     }
 
@@ -59,6 +59,11 @@ router.get("/logout", authenticate, async (req, res) => {
             secure: true
         })
         .json({status: 201, error: false, message: "User has been logged out."})
+});
+
+router.get("/generateOTP", async (req, res) => {
+    req.app.locals.OTP = await otpGenerator.generate(6, { lowerCaseAlphabets: false, upperCaseAlphabets: false, specialChars: false})
+    res.status(201).send({ code: req.app.locals.OTP })
 });
 
 export default router;

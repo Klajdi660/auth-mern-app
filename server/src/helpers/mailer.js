@@ -3,10 +3,7 @@ import { createTransport } from "nodemailer";
 
 const { service, host, port, email, password } = config.get("mailer");
 
-const sendConfirmationEmail = (name, userId ) => {
-  const url = `http://localhost:3000/users/${userId}/verify`;
-  const subject = "Login email verification";
- 
+const sendConfirmationEmail = ({ name, subject, link }) => {
   const transporter = createTransport({
     service: service,
     host: host,
@@ -25,7 +22,7 @@ const sendConfirmationEmail = (name, userId ) => {
     html: `
       <h3> Hello ${name} </h3>
       <p>Thank you for registering into our Application. Much Appreciated! Just one last step is laying ahead of you...</p>
-      <p>To activate your account please follow this link: <a target="_" href="${url}">${url}</a></p>.
+      <p>To activate your account please follow this link: <a target="_" href="${link}">${link}</a></p>.
       <p>Cheers</p>
       <p>Your Application Team</p>
     `,

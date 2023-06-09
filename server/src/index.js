@@ -2,6 +2,7 @@ import express from "express";
 import cors from "cors";
 import config from "config";
 import cookieParser from "cookie-parser";
+import userRoutes from "./routes/user.js";
 import authRoutes from "./routes/auth.js";
 
 const { port, prefix } = config.get("app");
@@ -24,7 +25,7 @@ app.use(express.json()); // to support JSON-encoded boddies
 app.use(express.urlencoded({ extended: true })); // to support URL-encoded boddies
 
 // api routes
-// app.use(`${prefix}/user`, userRoutes);
+app.use(`${prefix}/user`, userRoutes);
 app.use(`${prefix}/auth`, authRoutes);
 
 // port listening

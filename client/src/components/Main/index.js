@@ -16,7 +16,7 @@ const Main = () => {
 	
         const url = "http://localhost:8080/api/auth/logout";
 		
-		const res = await axios.get(url, {
+		const response = await axios.get(url, {
 			headers: {
 			  "Content-Type": "application/json",
 			    // Authorization: token,
@@ -26,7 +26,7 @@ const Main = () => {
 			withCredentials: true,
 		});
 		
-        const { status } = res.data;
+        const { status } = response.data;
 
 		if (status === 201) {
             localStorage.removeItem("userToken");
@@ -41,7 +41,7 @@ const Main = () => {
 		let token = localStorage.getItem("userToken");
 		const url = "http://localhost:8080/api/auth/validUser";
 
-		const res = await axios.get(url, {
+		const response = await axios.get(url, {
 			headers: {
 				"Content-Type": "application/json",
 				// Authorization: token,
@@ -51,8 +51,8 @@ const Main = () => {
 			withCredentials: true
 		});
 
-		const data = res.data;
-		console.log('data :>> ', data);
+		const data = response.data;
+		
 		if (data.status === 401 || !data) {
 			history("*");
 		} else {
@@ -69,7 +69,7 @@ const Main = () => {
 	    // eslint-disable-next-line react-hooks/exhaustive-deps
 	}, []);
 
-	const username = loadingData?.validUser?.username;
+	const username = loadingData?.data?.username;
 
 	return (
 		<>

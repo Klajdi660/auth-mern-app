@@ -2,12 +2,7 @@ import { useState } from "react";
 import axios from "axios";
 import { Link } from "react-router-dom";
 import styles from "./styles.module.css";
-import {
-  Button,
-  Checkbox,
-  Form,
-  Input,
-} from 'antd';
+import { Button, Checkbox, Form, Input } from 'antd';
 import { LoginOutlined, UserOutlined, MailOutlined, LockOutlined } from '@ant-design/icons';
 
 const Signup = () => {
@@ -23,7 +18,7 @@ const Signup = () => {
 
   const [inputVal, setInputVal] = useState(inputs);
   const [error, setError] = useState("");
-  const [msg, setMsg] = useState("");
+  const [message, setMessage] = useState("");
   const [form] = Form.useForm();
 
   const handleInputChange = (e) => {
@@ -34,16 +29,16 @@ const Signup = () => {
   
   const handleSubmit = async () => {
     try {
-      const url = "http://localhost:8080/api/users/register";
-      const res = await axios.post(url, inputVal);
+      const url = "http://localhost:8080/api/user/register";
+      const response = await axios.post(url, inputVal);
 
-      const { message } = res.data;
+      const { message } = response.data;
      
-      setMsg(message);
+      setMessage(message);
     
       // Clear message after 3 seconds
       setTimeout(() => {
-        setMsg("");
+        setMessage("");
         form.resetFields();
       }, 3000);
     } catch (error) {
@@ -219,8 +214,8 @@ const Signup = () => {
                 I accept the <Link to="#">Terms and Conditions!</Link>
               </Checkbox>
             </Form.Item>
-            {msg && (
-              <div className={styles.success_msg}>{msg}</div>
+            {message && (
+              <div className={styles.success_msg}>{message}</div>
             )}
             {error && (
               <div className={styles.error_msg}>{error}</div>

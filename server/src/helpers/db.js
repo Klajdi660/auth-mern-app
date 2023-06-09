@@ -15,7 +15,10 @@ const dbConnection = mysql.createConnection({
 });
 
 dbConnection.connect((error) => {
-    if (error) throw error;
+    if (error) {
+        return { status: 503, error: true, message: `Database not connected! ${error}`}
+    }
+
     console.log("Database connected successfully");
 });
 

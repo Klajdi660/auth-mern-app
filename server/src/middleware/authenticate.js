@@ -1,44 +1,39 @@
 import jwt from "jsonwebtoken";
 import config from "config";
 import dbConnection from "../helpers/db.js";
+import createQuery from "../helpers/query.js";
 
 const { access_token_secret } = config.get("jwt");
 
 const authenticate = async (req, res, next) => {
-    const authHeader = req.headers.authorization;
-
     try {
+        const authHeader = req.headers.authorization;
         const token = authHeader.split(' ')[1];
-
         const verifyToken = jwt.verify(token, access_token_secret);
-        
-        dbConnection.query("SELECT * FROM register WHERE id = ?", [verifyToken.id], (error, result) => {
-            if (error) {
-                return res.status(500).send({ error: true, message: "Error in querying the database" });
-            }
 
-            const user = result[0];
+        const query = "SELECT * FROM register WHERE id = ?";
+        const result = await createQuery(dbConnection, query, [verifyToken.id]);
+        const user = result[0];
 
-            if (!user) {
-                return res.status(401).send({ error: true, message: "User not found" });
-            }
+        if (!user) {
+            return res.status(401).json({ error: true, message: "User not found" });
+        }
 
-            req.token = token;
-            req.user = user;
-            req.userId = user.id;
-            req.query = user.id
-            next();
-        });
+        req.token = token;
+        req.user = user;
+        req.userId = user.id;
+            
+        next();
     } catch (error) {
         if (error.name === "JsonWebTokenError") {
-            return res.status(401).send({ error: true, message: "Unauthorized access"});
+            return res.status(401).json({ error: true, message: "Unauthorized access"});
         }
 
         if (error.name === "TokenExpiredError") {
-            return res.status(401).send({ error: true, message: "Session expired try sign in"});
+            return res.status(401).json({ error: true, message: "Session expired try sign in"});
         }
 
-        res.status(401).send({ error: true, message: 'Invalid token' })
+        res.status(401).json({ error: true, message: "Invalid token" });
     }
 };
 
