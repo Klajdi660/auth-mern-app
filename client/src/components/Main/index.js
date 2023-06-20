@@ -26,15 +26,15 @@ const Main = () => {
 			withCredentials: true,
 		});
 		
-        const { status } = response.data;
+        // const { status } = response.data;
 
-		if (status === 201) {
+		// if (status === 201) {
             localStorage.removeItem("userToken");
             setLoadingData(false);
             history("/");
-        } else {
-            console.log("error");
-        }
+        // } else {
+        //     console.log("error");
+        // }
     };
 
 	const validUser = async () => {
