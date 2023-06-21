@@ -21,7 +21,7 @@ const Login = () => {
 		setInputVal({ ...inputVal, [name]: value ? value : checked });
 	};
 
-	const handleSubmit = async () => {
+	const handleLoginSubmit = async () => {
 		try {
 			const url = "http://localhost:8080/api/auth/login";
 			const response = await axios.post(url, inputVal, { 
@@ -30,7 +30,7 @@ const Login = () => {
 			
 			const { status, data } = response.data;
 			
-			if (status === 201) {
+			if (status === 200) {
 				localStorage.setItem("userToken", data.token);
 				// window.location = "/dash";
 				navigate("/dash")
@@ -59,7 +59,7 @@ const Login = () => {
 					<Form 
 					    form={form} 
 						className={styles.form_container} 
-						onFinish={handleSubmit}
+						// onFinish={handleSubmit}
 					>
 						<h1>Welcome Back, Log In</h1>
 						<Form.Item
@@ -95,7 +95,7 @@ const Login = () => {
 							<Form.Item name="remember" valuePropName="checked" noStyle>
 								<Checkbox name="remember" checked={inputVal.remember} onChange={handleInputChange}>Remember me</Checkbox> 
 							</Form.Item>
-							<Link to="/forgotPassword" className={styles.forgot}> 
+							<Link to="/passwordReset" className={styles.forgot}> 
 								Forgot password
 							</Link>
 						</Form.Item>
@@ -105,6 +105,7 @@ const Login = () => {
 								type="none"
 								htmlType="submit"
 								icon={<LoginOutlined/>}
+								onClick={handleLoginSubmit}
 							>
 								Sign in
 							</Button>

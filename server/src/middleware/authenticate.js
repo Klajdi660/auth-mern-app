@@ -5,7 +5,7 @@ import createQuery from "../helpers/query.js";
 
 const { access_token_secret } = config.get("jwt");
 
-const authenticate = async (req, res, next) => {
+export const authenticate = async (req, res, next) => {
     try {
         const authHeader = req.headers.authorization;
         const token = authHeader.split(' ')[1];
@@ -37,32 +37,32 @@ const authenticate = async (req, res, next) => {
     }
 };
 
-export default authenticate;
+export const localVariables = (req, res, next ) => {
+    req.app.locals = {
+        OTP: null,
+        resetSession: false
+    }
+    next();
+};
 
-// export const localVariables = (req, res, next ) => {
-//     req.app.locals = {
-//         OTP: null,
-//         resetSession: false
-//     }
-//     next();
-// };
+export const verifyUser = async (req, res, next) => {
+    try {
+        const { username, email } = req.method === "GET" ? req.query : req.body;
+console.log('username :>> ', username);
+        const selectQuery = 'SELECT * FROM register WHERE email = ? OR username = ?';
+        const selectValue = [email, username];
 
-// export const verifyUser = async (req, res, next) => {
-//     try {
-//         const { usernameOrEmail } = req.method == 'GET' ? req.query : req.body;
+        const selectResult = await createQuery(dbConnection, selectQuery, selectValue);
 
-//         const query = "SELECT * FROM register WHERE username = ? OR email = ?";
-//         const values = [usernameOrEmail, usernameOrEmail];
-
-//         // check the user existence
-//         dbConnection.query(query, [values], (error, results) => {
-//             // if (results.length === 0) {
-//             //     return res.status(404).send({ error: true, message: "Can't find user!" });
-//             // }
-
-//             next();
-//         });
-//     } catch (error) {
-//         return res.status(500).send({ error: true, message: "Authentication Error" });
-//     }
-// };
+        const existingUser = selectResult[0];
+console.log('existingUser :>> ', existingUser);
+        if (existingUser.email !== email) {
+            return { status: 400, error: true, message: `Can't find User with this email: "${email}"!` };
+        } else if (existingUser.username !== username) {
+            return { status: 400, error: true, message: `Can't find User with this username: "${username}"!` };
+        }
+        next();
+    } catch (error) {
+        return res.status(404).json({ error: true, message: "Authentication Error" });
+    }
+};

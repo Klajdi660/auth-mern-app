@@ -1,6 +1,7 @@
 import bcrypt from "bcrypt";
 import jwt from "jsonwebtoken";
 import config from "config";
+import otpGenerator from "otp-generator";
 import dbConnection from "../helpers/db.js";
 import sendConfirmationEmail from "../helpers/mailer.js";
 import createQuery from "../helpers/query.js";
@@ -17,13 +18,13 @@ const login = async (usernameOrEmail, password) => {
     const user = results[0];
 
     if (!user) {
-      return { status: 401, error: true, message: "Invalid username/Email or Password!" };
+      return { error: true, message: "Invalid username/Email or Password!" };
     }
 
     const validPassword = await bcrypt.compare(password, user.password);
 
     if (!validPassword) {
-      return { status: 401, error: true, message: "Invalid username/Email or Password!" };
+      return { error: true, message: "Invalid username/Email or Password!" };
     }
 
     if (!user.verified) {
@@ -36,7 +37,7 @@ const login = async (usernameOrEmail, password) => {
        subject: subject
       });
   
-      return { status: 401, error: true, message: `Email ${usernameOrEmail} not verified. A verification email has been sent. Please check your inbox.` };
+      return { error: true, message: `Email ${usernameOrEmail} not verified. A verification email has been sent. Please check your inbox.` };
     }
 
     const id = user.id;
@@ -56,7 +57,39 @@ const login = async (usernameOrEmail, password) => {
       cookieOptions
     };
 
-    return { status: 201, error: false, message: "Logged in successfully", data: result };
+    return { error: false, message: "Logged in successfully", data: result };
+  } catch (error) {
+    console.error(`Error: ${error}`);
+    return { error: true, message: "Internal Server Error" };
+  }
+};
+
+const sendPasswordLink = async (email) => {
+  try {
+    const selectQuery = 'SELECT * FROM register WHERE email = ?';
+    const selectValue = [email];
+
+    const selectResult = await createQuery(dbConnection, selectQuery, selectValue);
+
+    const userFind = selectResult[0];
+    console.log('user :>> ', userFind.id);
+    if (!userFind) {
+      return { status: 401, error: true, message: "Invalid user" };
+    }
+
+    // token generate for reset password
+    const token = jwt.sign({ id: userFind.id }, access_token_secret, {
+      expiresIn: "120s"
+    });
+
+    const updateQuery = 'UPDATE register SET verifyToken = ? WHERE id = ?';
+    const updateValue = [token, userFind.id];
+
+    const updateResult = await createQuery(dbConnection, updateQuery, updateValue);
+
+    console.log('updateResult :>> ', updateResult);
+
+    return {error: false, message: "OK"};
   } catch (error) {
     console.error(`Error: ${error}`);
     return { status: 500, error: true, message: "Internal Server Error" };
@@ -83,6 +116,10 @@ const validUser = async (userId) => {
 
 const logOut = async () => {};
 
-const generateOTP = async () => {};
+const generateOTP = async (OTP) => {
+  OTP = otpGenerator.generate(6, { lowerCaseAlphabets: false, upperCaseAlphabets: false, specialChars: false});
 
-export const authService = { login, validUser, logOut, generateOTP };
+  return { error: false, message: "OTP code generate successfully!", code: OTP };
+};
+
+export const authService = { login, validUser, logOut, generateOTP, sendPasswordLink };

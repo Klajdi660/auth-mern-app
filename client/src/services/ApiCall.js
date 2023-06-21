@@ -9,7 +9,8 @@ export const commonRequest = async (methods, url, body, header) => {
             : {
                 "Content-Type": "application/json"
             },
-        data: body
+        data: body,
+        withCredentials: true 
     }
 
     return axios(config)
@@ -18,6 +19,6 @@ export const commonRequest = async (methods, url, body, header) => {
             return data;
         })
         .catch((error) => {
-            return error
+            return error;
         })
 };

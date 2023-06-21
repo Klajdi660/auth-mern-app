@@ -13,6 +13,8 @@ import ForgotPassword from "./components/ForgotPassword";
 import { AuthorizeUser } from "./middleware/auth";
 import { Paths } from "./common/paths";
 import Error from "./components/Error";
+import PasswordReset from "./components/PasswordReset/index.js";
+import VerifyOTP from "./components/OTPVerify";
 
 const router = createBrowserRouter([
   {
@@ -30,6 +32,14 @@ const router = createBrowserRouter([
   {
     path: Paths.emailVerify,
     element: <EmailVerify/>
+  },
+  {
+    path: Paths.passwordReset,
+    element: <PasswordReset/>
+  },
+  {
+    path: Paths.verifyOTP,
+    element: <VerifyOTP/>
   },
   {
     path: Paths.forgotPassword,
