@@ -1,69 +1,55 @@
-import {
-  //   Route,
-  //   Routes,
-  //   Navigate,
-  createBrowserRouter,
-  RouterProvider,
-} from "react-router-dom";
+import { createBrowserRouter, RouterProvider } from "react-router-dom";
+import { AuthorizeUser } from "./middleware/auth";
+import { path } from "./utils/paths";
 import Main from "./components/Main/";
 import Signup from "./components/Singup";
 import Login from "./components/Login";
 import EmailVerify from "./components/EmailVerify";
 import ForgotPassword from "./components/ForgotPassword";
-import { AuthorizeUser } from "./middleware/auth";
-import { Paths } from "./common/paths";
 import Error from "./components/Error";
 import PasswordReset from "./components/PasswordReset/index.js";
 import VerifyOTP from "./components/OTPVerify";
 
 const router = createBrowserRouter([
   {
-    path: Paths.login,
+    path: path.login,
     element: <Login/>
   },
   {
-    path: Paths.dashboard,
+    path: path.dashboard,
     element: <AuthorizeUser><Main/></AuthorizeUser>
   },
   {
-    path: Paths.register,
+    path: path.register,
     element: <Signup/>
   },
   {
-    path: Paths.emailVerify,
+    path: path.emailVerify,
     element: <EmailVerify/>
   },
   {
-    path: Paths.passwordReset,
+    path: path.passwordReset,
     element: <PasswordReset/>
   },
   {
-    path: Paths.verifyOTP,
+    path: path.verifyOTP,
     element: <VerifyOTP/>
   },
   {
-    path: Paths.forgotPassword,
+    path: path.forgotPassword,
     element: <ForgotPassword/>
   },
   {
-    path: Paths.error,
+    path: path.error,
     element: <Error/>
   }
 ]);
 
 const App = () => {
-  // const user = localStorage.getItem("userToken");
-
   return (
-    // <Routes>
-    // 	{ user && <Route path="/" exact element={<Main />} /> }
-    // 	<Route path="/signup" exact element={<Signup />} />
-    // 	<Route path="/forgotPassword" exact element={<ForgotPassword/>}/>
-    // 	<Route path="/login" exact element={<Login />} />
-    // 	<Route path="/" element={<Navigate replace to="/login" />} />
-    // 	<Route path="/users/:id/verify" element={<EmailVerify />} />
-    // </Routes>
-    <RouterProvider router={router}/>
+    <>
+      <RouterProvider router={router}/>
+    </>
   );
 };
 

@@ -9,22 +9,23 @@ import Error from "../Error";
 
 const EmailVerify = () => {
 	const [validUrl, setValidUrl] = useState(true);
-	// const { id, token } = useParams();
-	const param = useParams();
+	const { id, token } = useParams();
+
+	const verifyEmailUrl = async () => {
+		try {
+			const url = `http://localhost:8080/api/user/${id}/verify`;
+			await axios.get(url);
+			setValidUrl(true);
+		} catch (error) {
+			console.log(`Error: ${error}`);
+			setValidUrl(false);
+		}
+	};
 
 	useEffect(() => {
-		const verifyEmailUrl = async () => {
-			try {
-				const url = `http://localhost:8080/api/user/${param.id}/verify`;
-				await axios.get(url);
-				setValidUrl(true);
-			} catch (error) {
-				console.log(`Error: ${error}`);
-				setValidUrl(false);
-			}
-		};
 		verifyEmailUrl();
-	}, [param]);
+	// eslint-disable-next-line react-hooks/exhaustive-deps
+	}, [id]);
 
 	return (
 		<>
@@ -44,7 +45,7 @@ const EmailVerify = () => {
 					</Link>
 				</div>
 			) : (
-				<Error validUrl={validUrl} token={param.token}/>
+				<Error validUrl={validUrl} token={token}/>
 			)}
 		</>
 	);

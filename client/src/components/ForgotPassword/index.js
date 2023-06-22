@@ -15,9 +15,9 @@ const ForgotPassword = () => {
 
     const handleOtpChange = (code) => setCode(code);
 
-	const handleChange = ({ currentTarget: input }) => {
-		setData({ ...data, [input.name]: input.value });
-	};
+	// const handleChange = ({ currentTarget: input }) => {
+	// 	setData({ ...data, [input.name]: input.value });
+	// };
 
 	const handleSubmit = async () => {
 		try {
