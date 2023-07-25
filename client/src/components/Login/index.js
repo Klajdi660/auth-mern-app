@@ -55,22 +55,25 @@ const Login = () => {
 		// 		}, 3000);
 		// 	}
 		// }
+        try {
+			const res = await loginAPI(inputVal);
 
-		const res = await loginAPI(inputVal);
-
-		if (res.status === 200) {
-			const { data } = res.data;
-			localStorage.setItem("userToken", data.token);
-			navigate("/dash");
-		} else if (
-			res.response &&
-			res.response.status >= 400 &&
-			res.response.status <= 500
-		) {
-			setError(res.response.data.message);
-			setTimeout(() => {
-				setError("");
-			}, 3000);
+			if (res.status === 200) {
+				const { data } = res.data;
+				localStorage.setItem("userToken", data.token);
+				navigate("/dash");
+			} else if (
+				res.response &&
+				res.response.status >= 400 &&
+				res.response.status <= 500
+			) {
+				setError(res.response.data.message);
+				setTimeout(() => {
+					setError("");
+				}, 3000);
+			}
+		} catch (error) {
+			console.error(error);
 		}
 	};
 
