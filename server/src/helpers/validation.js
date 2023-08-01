@@ -2,16 +2,28 @@ import Joi from "joi";
 import passwordComplexity from "joi-password-complexity";
 
 const userValidate = (data) => {
-	const regex = /[±!@£$%^&*_+§¡€#¢§¶•ªº«\\/<>?:;]+/;
+	const usernameRegex = /[±!@£$%^&*_+§¡€#¢§¶•ªº«\\/<>?:;]+/;
+	const emailRegex = /^[a-zA-Z0-9._%+-]+@[a-zA-Z0-9.-]+\.[a-zA-Z]{2,}$/;
 
 	const schema = Joi.object({
-		firstName: Joi.string().required().label("First Name"),
-		lastName: Joi.string().required().label("Last Name"),
-		email: Joi.string().email().required().label("Email"),
-		username: Joi.string().pattern(regex, {
-			name: "noSpecialChars",
-			invert: true
-		  }).required().label("Username"),
+		firstName: Joi.string()
+			.required()
+			.label("First Name"),
+		lastName: Joi.string()
+			.required()
+			.label("Last Name"),
+		email: Joi.string()
+			.email({ tlds: { allow: false } })
+			.pattern(emailRegex)
+			.required()
+			.label("Email"),
+		username: Joi.string()
+			.pattern(usernameRegex, {
+				name: "noSpecialChars",
+				invert: true
+		  	})
+			.required()
+			.label("Username"),
 		password: passwordComplexity({
 			min: 8,
 			max: 50,
