@@ -48,14 +48,12 @@ export const localVariables = (req, res, next ) => {
 export const verifyUser = async (req, res, next) => {
     try {
         const { username, email } = req.method === "GET" ? req.query : req.body;
-console.log('username :>> ', username);
         const selectQuery = 'SELECT * FROM register WHERE email = ? OR username = ?';
         const selectValue = [email, username];
 
         const selectResult = await createQuery(dbConnection, selectQuery, selectValue);
 
         const existingUser = selectResult[0];
-console.log('existingUser :>> ', existingUser);
         if (existingUser.email !== email) {
             return { status: 400, error: true, message: `Can't find User with this email: "${email}"!` };
         } else if (existingUser.username !== username) {

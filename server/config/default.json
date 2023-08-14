@@ -4,7 +4,7 @@
     "prefix": "/api"
   },
   "cors": {
-    "cors_url": "http://localhost:3000"
+    "cors_url": "http://localhost:3001"
   },
   "jwt": {
     "access_token_secret": "Klajdi96@",

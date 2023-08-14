@@ -12,7 +12,7 @@ const userRegister = async (firstName, lastName, email, username, password, pass
         const selectValue = [email, username];
 
         const selectResult = await createQuery(dbConnection, selectQuery, selectValue);
-        
+        console.log('selectResult :>> ', selectResult);
         if (selectResult.length > 0) {
             const existingUser = selectResult[0];
 
@@ -60,8 +60,8 @@ const userVerification = async (id, token) => {
     const selectQuery = `SELECT * FROM register WHERE id = ?`;
 
     const selectResult = await createQuery(dbConnection, selectQuery, [id]);
-
-    const user = selectResult[0];
+    console.log('selectResult :>> ', selectResult[0]);
+    const user = selectResult;
     if (!user) {
         return { status: 400, error: true, message: "No user found" };
     }

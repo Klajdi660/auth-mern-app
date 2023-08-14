@@ -3,12 +3,10 @@ import config  from "config";
 const { access_token_secret } = config.get("jwt");
 
 // Create tokens
-const generateToken = (userId, expiration) => {
-    const payload = { userId, expiration };
-
-    const token = jwt.sign({ userId }, access_token_secret, { expiresIn: expiration });
+const generateToken = (userId, expiration) => {  
+  const token = jwt.sign({ userId }, access_token_secret, { expiresIn: expiration });
     
-    return token;
+  return token;
 };
 
 const decodeToken = (token) => {
