@@ -6,14 +6,17 @@
     "cors": {
         "cors_url": "http://localhost:3001"
     },
+    "logLevel": "info",
     "token": {
         "access_token_secret": "Klajdi96@",
         "jwt_expires_in": "15m",
         "jwt_cookie_expires": "2d"
     },
     "mysql": {
+        "connectionLimit": 10,
         "host": "localhost",
         "user": "root",
+        "port": "",
         "password": "Klajdi1996",
         "database": "node-reg"
     },
@@ -21,7 +24,16 @@
         "service": "gmail",
         "host": "smtp.gmail.com",
         "port": 587,
+        "secure": false,
         "email": "klajdixhafkollari36@gmail.com",
         "password": "qejogblzqwvvimac"
-    }    
+    },
+    "otp": {
+        "otpLength": 6,
+        "otpConfig": {
+            "lowerCaseAlphabets": false,
+            "upperCaseAlphabets": false,
+            "specialChars": false
+        }
+    }  
 }
