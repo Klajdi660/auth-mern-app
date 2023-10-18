@@ -3,7 +3,8 @@ import config from "config";
 import cors from "cors";
 import cookieParser from "cookie-parser";
 import { connectToDb } from "./clients/db";
-import log from "./utils/logger";
+import { log } from "./utils/logger";
+import routes from "./routes";
 
 const { port, prefix } = config.get<{ port: number, prefix: string }>("app");
 const { cors_url } = config.get<{ cors_url: string }>("cors");
@@ -16,11 +17,17 @@ const corsOptions = {
     credentials: true
 };
 
-app.disable("x-powered-by");
+app.disable("x-powered-by"); // less hackers know about our stack
 app.use(cors(corsOptions));
 app.options("*", cors());
 app.use(cookieParser());
-app.use(express.json({ limit: "10mb" }));
+
+// need to be able to read body data 
+app.use(express.json({ limit: "10mb" })); // to support JSON-encoded boddies
+app.use(express.urlencoded({ extended: true })); // to support URL-encoded boddies
+
+// start routes
+app.use(routes);
 
 // start server only when we have valid connection
 const startServer = async () => {

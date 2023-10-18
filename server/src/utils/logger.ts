@@ -4,7 +4,7 @@ import config from "config";
 
 const level = config.get<string>("logLevel");
 
-const log = logger({
+export const log = logger({
     transport: {
       target: "pino-pretty",
     },
@@ -14,5 +14,3 @@ const log = logger({
     },
     timestamp: () => `,"time":"${dayjs().format()}"`,
 });
-
-export default log;

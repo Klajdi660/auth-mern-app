@@ -1,6 +1,6 @@
 import config from "config";
 import { Sequelize } from "sequelize";
-import log from "../../utils/logger";
+import { log } from "../../utils/logger";
 
 const { 
     host: dbHost, 
