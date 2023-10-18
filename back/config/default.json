@@ -1,0 +1,27 @@
+{
+  "app": {
+    "port": 8080,
+    "prefix": "/api"
+  },
+  "cors": {
+    "cors_url": "http://localhost:3001"
+  },
+  "jwt": {
+    "access_token_secret": "Klajdi96@",
+    "jwt_expires_in": "15m",
+    "jwt_cookie_expires": "2d"
+  },
+  "db": {
+    "host": "localhost",
+    "user": "root",
+    "password": "Klajdi1996",
+    "database": "node-reg"
+  },
+  "mailer": {
+    "service": "gmail",
+    "host": "smtp.gmail.com",
+    "port": 587,
+    "email": "klajdixhafkollari36@gmail.com",
+    "password": "qejogblzqwvvimac"
+  }
+}
