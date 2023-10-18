@@ -1,14 +1,17 @@
 import { Request, Response, Router } from "express";
 import { asyncHandler } from "../../utils";
+import validateResource from "../../middleware/validateResource";
+import { creatUserSchema } from "../../schema/user.schema";
+import { createUserHandler } from "./createUser";
 
 const createUserRoutes = Router();
 
 createUserRoutes.post(
     "/register",
-    asyncHandler(async (req: Request, res: Response) => {
-        const { firstName, lastName, email, username, password, passwordConfirm, agreedToTerms } = req.body;
-        console.log('req.body :>> ', req.body);
-        res.json(req.body);
+    validateResource(creatUserSchema),
+    asyncHandler(async (req: Request, res: Response) => {   
+        const response = await createUserHandler(req.body);
+        res.json(response);
     })
 );
 

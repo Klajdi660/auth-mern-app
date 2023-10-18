@@ -1,0 +1,52 @@
+<!DOCTYPE html>
+<html lang="en">
+    <head>
+    <title>Confirm account</title>
+    <meta http-equiv="Content-Type" content="text/html; charset=UTF-8" />
+    <style>
+        body {
+            font-family: calibri, 'DejaVu Sans', Arial, Helvetica, sans-serif;
+            background-color: #cbd5e1;
+        }
+        .container {
+            margin: 0 auto;
+            width: 400px;
+            padding: 10px 30px 30px 30px;
+            box-shadow: 0 0 4px #ddd;
+            background-color: #f3f4f6;
+            border-radius: 5px;
+        }
+        .content {
+            width: 410px;
+        }
+        .link {
+            border: solid 1px #1677ff;
+            background: #1677ff;
+            text-decoration: none;
+            color: #fff;
+            font-weight: bold;
+            font-size: 25px;
+            width: 120px;
+            text-align: center;
+            padding: 10px 0;
+            margin: 0 auto;
+            border-radius: 5px; 
+        }
+        .text-blue {
+            color: #1677ff;
+        }
+    </style>
+    </head>
+    <body>
+        <div class="container">
+            <h1 class="text-blue" style="text-align: center;">{{title}}</h1>
+            <p style="text-align: center;">Welcome back, <b class="text-blue">{{name}}</b>!</p>
+            <p class="content">Your code is:</p>
+            <p class="link">{{url}}</p>
+            <p>
+                Regards, <br />
+                <em>The AwesomeApp Team.</em>
+            </p>
+        </div>
+    </body>
+</html>

@@ -15,17 +15,18 @@ User.init(
             allowNull: false,
             unique: true
         },
-        firstname: {
+        firstName: {
             type: DataTypes.STRING,
             allowNull: false
         },
-        lastname: {
+        lastName: {
             type: DataTypes.STRING,
             allowNull: false
         },
         token: {
-            type: DataTypes.STRING
-        }
+            type: DataTypes.STRING,
+            allowNull: true
+        }  
     },
     {
        sequelize: sequelizeConnection,

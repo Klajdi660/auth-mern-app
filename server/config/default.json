@@ -18,9 +18,9 @@
         "user": "root",
         "port": "",
         "password": "Klajdi1996",
-        "database": "node-reg"
+        "database": "node-registration"
     },
-    "mailer": {
+    "mail": {
         "service": "gmail",
         "host": "smtp.gmail.com",
         "port": 587,
