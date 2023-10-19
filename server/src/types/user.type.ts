@@ -6,6 +6,7 @@ export interface UserTypesParams {
     password: string;
     passwordConfirm: string;
     agreedToTerms: boolean;
+    otpCode: number
 };
 
 export interface smtpEmailTypesParams {
@@ -16,3 +17,15 @@ export interface smtpEmailTypesParams {
     email: string;
     password: string;
 };
+
+// send otp routes
+interface OtpConfig {
+    lowerCaseAlphabets: boolean;
+    upperCaseAlphabets: boolean;
+    specialChars: boolean;
+};
+
+export interface OtpSettings {
+    otpLength: number;
+    otpConfig: OtpConfig;
+}

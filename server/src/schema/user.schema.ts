@@ -53,6 +53,9 @@ export const creatUserSchema = object({
             return value === true;
         }, {
             message: "You must agree to the terms and conditions to register"
+        }),
+        otpCode: number({
+            required_error: "OTP code is required"
         })
     }).refine((data) => data.password === data.passwordConfirm, {
         message: "Passwords do not match",
@@ -60,5 +63,14 @@ export const creatUserSchema = object({
     }),
 });
 
+export const otpCodeSchema = object({
+    body: object({
+        email: string({
+            required_error: "Email is required",
+        }).regex(emailRegex, "Not a valid email"),
+    }),
+});
+
 export type UserInput = TypeOf<typeof creatUserSchema>["body"];
+export type OtpCodeInput = TypeOf<typeof otpCodeSchema>["body"];
  

@@ -6,7 +6,7 @@ import { smtpEmailTypesParams } from "../types/user.type";
 
 const smtp = config.get<smtpEmailTypesParams>("mail");
 
-export const sendEmail = async () => {
+export const sendEmail = (templatePath: string, templateData: any) => {
     let transporter = createTransport({
         ...smtp,
         auth: {
@@ -32,15 +32,12 @@ export const sendEmail = async () => {
     const mailOptions = {
         from: "klajdixhafkollari36@gmail.com",
         to: "klajdixhafkollari36@gmail.com",
-        subject: `OTP Code`,
-        template: "OTP",
-        context: {
-          title: "OTP Code",
-          name: "Test",
-          url: "12345"
-        },
+        subject: templateData.title,
+        template: templatePath,
+        context: templateData,
         html: ""
     };
 
-    const info = await transporter.sendMail(mailOptions);
+    const info = transporter.sendMail(mailOptions);
+    return info;
 };
