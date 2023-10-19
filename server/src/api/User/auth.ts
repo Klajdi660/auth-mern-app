@@ -8,7 +8,7 @@ import { log, sendEmail } from "../../utils";
 
 const { otpLength, otpConfig } = config.get<OtpSettings>("otp");
 
-const getUsersByEmail = async (email: string) => {
+const getUserByEmail = async (email: string) => {
     return User.findOne({
         where: { email }
     }).catch((error) => {
@@ -16,7 +16,7 @@ const getUsersByEmail = async (email: string) => {
     })
 };
 
-const getUsersByEmailOrUsername = async (email: string, username: string) => {
+const getUserByEmailOrUsername = async (email: string, username: string) => {
     return User.findOne({
         where: {
             [Op.or]: [{ email }, { username }]
@@ -68,7 +68,7 @@ const generateUniqueOTP = async (): Promise<string> => {
 // Send OTP code for email verification
 export const sendOTPCodeHandler = async (email: string, firstName: string, lastName: string) => {
     // check user in database
-    const existingUser: any = await getUsersByEmail(email);
+    const existingUser: any = await getUserByEmail(email);
 
     if (existingUser) {
         return { error: true, message: "User already exists. Please sign in to continue." };
@@ -108,7 +108,7 @@ export const createUserHandler = async (data: UserTypesParams) => {
     const { email, username, otpCode } = data;
     
     // check user in database
-    const existingUser: any = await getUsersByEmailOrUsername(email, username);
+    const existingUser: any = await getUserByEmailOrUsername(email, username);
 
     if (existingUser) {
         if (existingUser.email === email && existingUser.username === username) {
@@ -142,6 +142,17 @@ export const createUserHandler = async (data: UserTypesParams) => {
     const user: any = await createUser(data);
 
     return (!user) 
-        ? { error: true, message: "User can't be created" }
+        ? { error: true, message: "User can't be created. Please try again." }
         : { error: false, message: "User registered successfully" };
+};
+
+// Create session (login user)
+export const createSessionHandler = async (usernameOrEmail: string) => {
+    // Find user with provided email
+    const user = await getUserByEmailOrUsername(usernameOrEmail, usernameOrEmail);
+    if (!user) {
+        return { error: true, message: "User is not Registered with us, please SignUp to continue." };
+    }
+
+    
 };

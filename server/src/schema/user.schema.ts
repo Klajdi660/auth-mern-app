@@ -24,7 +24,7 @@ const isPasswordValid = (password: string): string[] => {
     return messages;
 };
 
-export const creatUserSchema = object({
+export const createUserSchema = object({
     body: object({
         email: string({
             required_error: "Email is required",
@@ -63,6 +63,17 @@ export const creatUserSchema = object({
     }),
 });
 
+export const createSessionSchema = object({
+    body: object({
+        usernameOrEmail: string({
+            required_error: "Username/Email is required",
+        }),
+        password: string({
+            required_error: "Password is required",
+        }),
+    }),
+});
+
 export const otpCodeSchema = object({
     body: object({
         email: string({
@@ -71,6 +82,7 @@ export const otpCodeSchema = object({
     }),
 });
 
-export type UserInput = TypeOf<typeof creatUserSchema>["body"];
+export type UserInput = TypeOf<typeof createUserSchema>["body"];
+export type SessionInput = TypeOf<typeof createSessionSchema>["body"];
 export type OtpCodeInput = TypeOf<typeof otpCodeSchema>["body"];
  

@@ -1,10 +1,22 @@
 import { Request, Response, Router } from "express";
 import { asyncHandler } from "../../utils";
 import validateResource from "../../middleware/validateResource";
-import { creatUserSchema, otpCodeSchema } from "../../schema/user.schema";
-import { createUserHandler, sendOTPCodeHandler } from "./auth";
+import { createUserSchema, createSessionSchema, otpCodeSchema } from "../../schema/user.schema";
+import { createSessionHandler, createUserHandler, sendOTPCodeHandler } from "./auth";
 
 const userRoutes = Router();
+
+// Route for creating session (user login)
+userRoutes.post(
+    "/sessions",
+    validateResource(createSessionSchema),
+    asyncHandler(async (req: Request, res: Response) => {
+        const { usernameOrEmail, password } = req.body;
+        console.log('req.body :>> ', req.body);
+        const response = await createSessionHandler(usernameOrEmail);
+        res.json(response);
+    })
+);
 
 // Route for sending OTP code to the user's email
 userRoutes.post(
@@ -17,9 +29,10 @@ userRoutes.post(
     })
 );
 
+// Route for creating user 
 userRoutes.post(
     "/register",
-    validateResource(creatUserSchema),
+    validateResource(createUserSchema),
     asyncHandler(async (req: Request, res: Response) => {   
         const response = await createUserHandler(req.body);
         res.json(response);
