@@ -8,9 +8,14 @@
     "start": "node dist/server.js",
     "dev": "concurrently \"npx tsc --watch\" \"nodemon -q dist/server.js\""
   },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/Klajdi660/auth-mern-app"
+  },
   "author": "klajdi96",
   "license": "ISC",
   "type": "commonjs",
+  "homepage": "https://github.com/Klajdi660/auth-mern-app#readme",
   "dependencies": {
     "axios": "^1.5.1",
     "config": "^3.3.9",
