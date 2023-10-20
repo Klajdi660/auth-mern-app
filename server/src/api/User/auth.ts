@@ -2,7 +2,6 @@ import { Op } from "sequelize";
 import config from "config";
 import crypto from "crypto";
 import dayjs from "dayjs";
-import utc from "dayjs/plugin/utc";
 import otpGenerator from "otp-generator";
 import { OtpSettings, UserTypesParams } from "../../types/user.type";
 import { User } from "../../models/Users";
@@ -88,15 +87,10 @@ export const sendOTPCodeHandler = async (email: string, firstName: string, lastN
         name: `${firstName} ${lastName}`,
         code: otp
     };
-
-    const currentTime = dayjs();
-    const expirationTime = currentTime.add(1, 'minute');
     
     const otpPayload = { 
         email,
         otp,
-        createdAt: currentTime.format(),
-        expiresAt: expirationTime.format()
     }
     const otpBody = await OTP.create(otpPayload);
     log.info(`Otp Body: ${JSON.stringify(otpBody)}`);
@@ -136,30 +130,22 @@ export const createUserHandler = async (data: UserTypesParams) => {
         .digest("hex");
 
     // find the most recent OTP code for email
-    const otpRes = await OTP.findOne({
+    const otpResp = await OTP.findOne({
         where: { email },
         order: [[`createdAt`, 'DESC']], // sorting order(from newest to oldest) so that the most recently created document appears first
         limit: 1, // set to just one document
     }) as any;
 
-    if (!otpRes || otpCode !== +otpRes.otp) {
+    if (!otpResp || otpCode !== +otpResp.otp) {
         return { error: true, message: "The OTP code is not valid" };
     }
-    const currentTimestamp = new Date();
-    console.log('currentTimestamp :>> ', currentTimestamp);
-    const expiresAtTimestamp = new Date(otpRes.expiresAt);
-    console.log('expiresAtTimestamp :>> ', expiresAtTimestamp);
-    
-    // if (expiresAt.isBefore(dayjs())) {
-    //     return { error: true, message: "The OTP code has expired" };
-    // }
-
+   
     // insert user in database
-    // const user: any = await createUser(data, hashedPassword);
+    const user: any = await createUser(data, hashedPassword);
 
-    // return (!user) 
-    //     ? { error: true, message: "User can't be created. Please try again." }
-    //     : { error: false, message: "User registered successfully" };
+    return (!user) 
+        ? { error: true, message: "User can't be created. Please try again." }
+        : { error: false, message: "User registered successfully" };
 };
 
 // Create session (login user)
