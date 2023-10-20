@@ -37,6 +37,7 @@
     "@types/node": "^20.8.6",
     "@types/nodemailer": "^6.4.11",
     "@types/nodemailer-express-handlebars": "^4.0.3",
+    "@types/otp-generator": "^4.0.1",
     "concurrently": "^8.2.1",
     "nodemon": "^3.0.1",
     "pino-pretty": "^10.2.3",

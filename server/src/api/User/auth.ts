@@ -1,5 +1,8 @@
 import { Op } from "sequelize";
 import config from "config";
+import crypto from "crypto";
+import dayjs from "dayjs";
+import utc from "dayjs/plugin/utc";
 import otpGenerator from "otp-generator";
 import { OtpSettings, UserTypesParams } from "../../types/user.type";
 import { User } from "../../models/Users";
@@ -26,7 +29,7 @@ const getUserByEmailOrUsername = async (email: string, username: string) => {
     })
 };
 
-const createUser = async (data: UserTypesParams) => {
+const createUser = async (data: UserTypesParams, hashedPassword: string) => {
     const { email, username, lastName, firstName } = data;
 
     const newUser = new User({
@@ -34,6 +37,7 @@ const createUser = async (data: UserTypesParams) => {
         username,
         firstName, 
         lastName,
+        password: hashedPassword
     });
 
     const saveUser = await newUser
@@ -85,9 +89,14 @@ export const sendOTPCodeHandler = async (email: string, firstName: string, lastN
         code: otp
     };
 
+    const currentTime = dayjs();
+    const expirationTime = currentTime.add(1, 'minute');
+    
     const otpPayload = { 
         email,
-        otp
+        otp,
+        createdAt: currentTime.format(),
+        expiresAt: expirationTime.format()
     }
     const otpBody = await OTP.create(otpPayload);
     log.info(`Otp Body: ${JSON.stringify(otpBody)}`);
@@ -105,7 +114,7 @@ export const sendOTPCodeHandler = async (email: string, firstName: string, lastN
 
 // Create user
 export const createUserHandler = async (data: UserTypesParams) => {
-    const { email, username, otpCode } = data;
+    const { email, username, otpCode, password } = data;
     
     // check user in database
     const existingUser: any = await getUserByEmailOrUsername(email, username);
@@ -120,6 +129,12 @@ export const createUserHandler = async (data: UserTypesParams) => {
         }
     }
 
+    // hash password
+    const hashedPassword = crypto
+        .createHash("sha1")
+        .update(password + username)
+        .digest("hex");
+
     // find the most recent OTP code for email
     const otpRes = await OTP.findOne({
         where: { email },
@@ -130,29 +145,37 @@ export const createUserHandler = async (data: UserTypesParams) => {
     if (!otpRes || otpCode !== +otpRes.otp) {
         return { error: true, message: "The OTP code is not valid" };
     }
+    const currentTimestamp = new Date();
+    console.log('currentTimestamp :>> ', currentTimestamp);
+    const expiresAtTimestamp = new Date(otpRes.expiresAt);
+    console.log('expiresAtTimestamp :>> ', expiresAtTimestamp);
     
-    let otpExpiresAtTimestamp = new Date(otpRes.expiresAt);
-    let currentTimestamp = new Date();
-
-    if (currentTimestamp > otpExpiresAtTimestamp) {
-        return { error: true, message: "The OTP code has expired" };
-    }
+    // if (expiresAt.isBefore(dayjs())) {
+    //     return { error: true, message: "The OTP code has expired" };
+    // }
 
     // insert user in database
-    const user: any = await createUser(data);
+    // const user: any = await createUser(data, hashedPassword);
 
-    return (!user) 
-        ? { error: true, message: "User can't be created. Please try again." }
-        : { error: false, message: "User registered successfully" };
+    // return (!user) 
+    //     ? { error: true, message: "User can't be created. Please try again." }
+    //     : { error: false, message: "User registered successfully" };
 };
 
 // Create session (login user)
-export const createSessionHandler = async (usernameOrEmail: string) => {
+export const createSessionHandler = async (usernameOrEmail: string, password: string, username: string) => {
     // Find user with provided email
-    const user = await getUserByEmailOrUsername(usernameOrEmail, usernameOrEmail);
+    const user: any = await getUserByEmailOrUsername(usernameOrEmail, usernameOrEmail);
     if (!user) {
         return { error: true, message: "User is not Registered with us, please SignUp to continue." };
     }
 
-    
+    const expectedPasssword = crypto
+        .createHash("sha1")
+        .update(password + username)
+        .digest("hex");
+        
+    if(user.password !== expectedPasssword) {
+        return { error: true, message: "Invalid Password! Please enter valid password." };
+    }
 };

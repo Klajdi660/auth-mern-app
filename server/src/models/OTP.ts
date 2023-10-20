@@ -16,13 +16,13 @@ OTP.init(
         },
         createdAt: {
             type: DataTypes.DATE,
-            defaultValue: DataTypes.NOW,
+            // defaultValue: DataTypes.NOW,
             allowNull: false
         },
         expiresAt: {
             type: DataTypes.DATE,
             allowNull: false,
-            defaultValue: literal("CURRENT_TIMESTAMP + INTERVAL 60 SECOND"),
+            // defaultValue: literal("CURRENT_TIMESTAMP + INTERVAL 60 SECOND"),
         },
     },
     {
