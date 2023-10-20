@@ -12,7 +12,6 @@ userRoutes.post(
     validateResource(createSessionSchema),
     asyncHandler(async (req: Request, res: Response) => {
         const { usernameOrEmail, password, username } = req.body;
-        console.log('req.body :>> ', req.body);
         const response = await createSessionHandler(usernameOrEmail, password, username);
         res.json(response);
     })
