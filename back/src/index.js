@@ -4,6 +4,7 @@ import config from "config";
 import cookieParser from "cookie-parser";
 import userRoutes from "./routes/user.js";
 import authRoutes from "./routes/auth.js";
+import dbConnection from "./helpers/db.js";
 
 const { port, prefix } = config.get("app");
 const { cors_url } = config.get("cors")
@@ -30,5 +31,12 @@ app.use(`${prefix}/auth`, authRoutes);
 
 // port listening
 app.listen(port, () => {
+    dbConnection.connect((error) => {
+        if (error) {
+            return { status: 503, error: true, message: `Database not connected! ${error}`}
+        }
+    
+        console.log("Database connected successfully");
+    })
     console.log(`Listening on port: ${port}`);
 });
