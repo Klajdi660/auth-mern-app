@@ -4,7 +4,7 @@
   "description": "",
   "main": "index.js",
   "scripts": {
-    "build": "npx i",
+    "build": "npm i",
     "dev": "ts-node-dev --respawn --transpile-only src/server.ts"
   },
   "repository": {
