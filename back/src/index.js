@@ -31,12 +31,5 @@ app.use(`${prefix}/auth`, authRoutes);
 
 // port listening
 app.listen(port, () => {
-    dbConnection.connect((error) => {
-        if (error) {
-            return { status: 503, error: true, message: `Database not connected! ${error}`}
-        }
-    
-        console.log("Database connected successfully");
-    })
-    console.log(`Listening on port: ${port}`);
+    console.log(`[Server]: Listening on port: ${port}`);
 });
