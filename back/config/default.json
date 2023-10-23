@@ -11,6 +11,8 @@
     "jwt_expires_in": "15m",
     "jwt_cookie_expires": "2d"
   },
+  "accessTokenPrivateKey": "",
+  "refreshTokenPrivateKey": "",
   "db": {
     "host": "localhost",
     "user": "root",

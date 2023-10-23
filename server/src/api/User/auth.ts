@@ -1,13 +1,15 @@
 import { Op } from "sequelize";
 import config from "config";
 import crypto from "crypto";
+import jwt from "jsonwebtoken";
 import dayjs from "dayjs";
 import utc from "dayjs/plugin/utc";
 import otpGenerator from "otp-generator";
 import { OtpSettings, UserTypesParams } from "../../types/user.type";
 import { User } from "../../models/Users";
 import { OTP } from "../../models/OTP";
-import { log, sendEmail } from "../../utils";
+import { log, sendEmail, signAccessJWT, signRefereshToken } from "../../utils";
+import { Session } from "../../models/Session";
 
 const { otpLength, otpConfig } = config.get<OtpSettings>("otp");
 
@@ -148,8 +150,8 @@ export const createUserHandler = async (data: UserTypesParams) => {
     const timeDifferenceMinutes = expiresAtTimestamp.diff(currentTimestamp, 'seconds');
 
     if (timeDifferenceMinutes <= 0) {
-        log.error('Your OTP has expired. Please request a new OTP.');
-        return { error: true, message: "Your OTP code has expired. Please request a new OTP." };
+        log.error('Your OTP has expired.');
+        return { error: true, message: "Your OTP code has expired. Please request a new OTP code." };
     }
 
     // insert user in database
@@ -157,10 +159,14 @@ export const createUserHandler = async (data: UserTypesParams) => {
 
     return (!user) 
         ? { error: true, message: "User can't be created. Please try again." }
-        : { error: false, message: "User registered successfully" };
+        : { error: false, message: "User registered successfully." };
 };
 
 // Create session (login user)
+export const createSession = async ({ userId }: { userId: string }) => {
+    return Session.create({ userId });
+};
+
 export const createSessionHandler = async (usernameOrEmail: string, password: string, username: string) => {
     // Find user with provided email
     const user: any = await getUserByEmailOrUsername(usernameOrEmail, usernameOrEmail);
@@ -176,4 +182,11 @@ export const createSessionHandler = async (usernameOrEmail: string, password: st
     if(user.password !== expectedPasssword) {
         return { error: true, message: "Invalid Password! Please enter valid password." };
     }
+    
+    // create access token
+    const accessToken = signAccessJWT(user);
+    console.log('accessToken :>> ', accessToken);
+    // create a refresh token 
+    // const refreshToken = await signRefereshToken({ userId: user.id });
+    // console.log('refreshToken :>> ', refreshToken);
 };
