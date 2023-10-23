@@ -2,6 +2,7 @@ import { Op } from "sequelize";
 import config from "config";
 import crypto from "crypto";
 import dayjs from "dayjs";
+import utc from "dayjs/plugin/utc";
 import otpGenerator from "otp-generator";
 import { OtpSettings, UserTypesParams } from "../../types/user.type";
 import { User } from "../../models/Users";
@@ -139,7 +140,18 @@ export const createUserHandler = async (data: UserTypesParams) => {
     if (!otpResp || otpCode !== +otpResp.otp) {
         return { error: true, message: "The OTP code is not valid" };
     }
-   
+
+    // check if otp code is expired
+    dayjs.extend(utc);
+    const currentTimestamp = dayjs().utc();
+    const expiresAtTimestamp = dayjs(otpResp.expiresAt + "Z").utc();
+    const timeDifferenceMinutes = expiresAtTimestamp.diff(currentTimestamp, 'seconds');
+
+    if (timeDifferenceMinutes <= 0) {
+        log.error('Your OTP has expired. Please request a new OTP.');
+        return { error: true, message: "Your OTP code has expired. Please request a new OTP." };
+    }
+
     // insert user in database
     const user: any = await createUser(data, hashedPassword);
 

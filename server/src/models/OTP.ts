@@ -27,7 +27,7 @@ OTP.init(
     },
     {
         sequelize: sequelizeConnection,
-        modelName: "usersOTP",
-        tableName: "usersOTP"
+        modelName: "usersCode",
+        tableName: "usersCode"
     }
 );
