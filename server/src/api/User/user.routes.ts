@@ -19,7 +19,7 @@ userRoutes.post(
 
 // Route for sending OTP code to the user's email
 userRoutes.post(
-    "/sendOtp",
+    "/sendotp",
     validateResource(otpCodeSchema),
     asyncHandler(async (req: Request, res: Response) => {
         const { email, firstName, lastName } = req.body;

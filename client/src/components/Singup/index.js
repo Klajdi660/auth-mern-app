@@ -1,10 +1,11 @@
 import { useState } from "react";
-import axios from "axios";
-import { Link } from "react-router-dom";
+// import axios from "axios";
+import { Link, useNavigate } from "react-router-dom";
 import styles from "./styles.module.css";
 import { Button, Checkbox, Form, Input } from 'antd';
 import { LoginOutlined, UserOutlined, MailOutlined, LockOutlined } from '@ant-design/icons';
-
+import { registerAPI } from "../../api/Apis";
+import { path } from "../../utils/paths";
 const Signup = () => {
   const inputs = {
     firstName: "",
@@ -20,6 +21,7 @@ const Signup = () => {
   const [error, setError] = useState("");
   const [message, setMessage] = useState("");
   const [form] = Form.useForm();
+  const navigate = useNavigate();
 
   const handleInputChange = (e) => {
     const { name, value, checked } = e.target;
@@ -29,13 +31,14 @@ const Signup = () => {
   
   const handleSubmit = async () => {
     try {
-      const url = "http://localhost:8080/api/user/register";
-      const response = await axios.post(url, inputVal);
-
+      // const url = "http://localhost:8080/api/user/register";
+      // const response = await axios.post(url, inputVal);
+      const response = await registerAPI(inputVal)
+      console.log("res", response);
       const { message } = response.data;
      
       setMessage(message);
-    
+      navigate(path.verifyOTP);
       // Clear message after 3 seconds
       setTimeout(() => {
         setMessage("");

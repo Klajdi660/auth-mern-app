@@ -4,7 +4,7 @@
         "prefix": "/api"
     },
     "cors": {
-        "cors_url": "http://localhost:3001"
+        "cors_url": "http://localhost:3000"
     },
     "logLevel": "info",
     "token": {
@@ -17,7 +17,7 @@
         "host": "localhost",
         "user": "root",
         "port": "",
-        "password": "Klajdi1996",
+        "password": "",
         "database": "node-registration"
     },
     "mail": {

@@ -2,7 +2,8 @@ import { commonRequest } from "./ApiCall";
 import { backend_url } from "./helper";
 
 export const registerAPI = async (data) => {
-    return await commonRequest("POST", `${backend_url}/user/register`, data);
+    // return await commonRequest("POST", `${backend_url}/user/register`, data);
+    return await commonRequest("POST", `${backend_url}/auth/sendotp`, data);
 };
 
 export const loginAPI = async (data) => {
