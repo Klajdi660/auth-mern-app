@@ -34,4 +34,4 @@ export const sendOtp = (email, navigate) => {
   
         dispatch(setLoading(false));
     };
-  };
+};
