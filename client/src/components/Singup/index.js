@@ -6,6 +6,10 @@ import { Button, Checkbox, Form, Input } from 'antd';
 import { LoginOutlined, UserOutlined, MailOutlined, LockOutlined } from '@ant-design/icons';
 import { registerAPI } from "../../api/Apis";
 import { path } from "../../utils/paths";
+import { useDispatch } from "react-redux";
+import { sendOtp } from "../../services/operations/authAPI";
+import { setSignupData } from "../../slices/authSlice";
+
 const Signup = () => {
   const inputs = {
     firstName: "",
@@ -22,6 +26,7 @@ const Signup = () => {
   const [message, setMessage] = useState("");
   const [form] = Form.useForm();
   const navigate = useNavigate();
+  const dispatch = useDispatch();
 
   const handleInputChange = (e) => {
     const { name, value, checked } = e.target;
@@ -31,14 +36,13 @@ const Signup = () => {
   
   const handleSubmit = async () => {
     try {
-      // const url = "http://localhost:8080/api/user/register";
-      // const response = await axios.post(url, inputVal);
       const response = await registerAPI(inputVal)
-      console.log("res", response);
+
       const { message } = response.data;
      
       setMessage(message);
       navigate(path.verifyOTP);
+
       // Clear message after 3 seconds
       setTimeout(() => {
         setMessage("");
@@ -60,6 +64,31 @@ const Signup = () => {
     }
   };
 
+  const handleOnSubmit = () => {
+    const signupData = {
+      ...inputVal,
+      // accountType,
+    }
+
+    // Setting signup data to state
+    // To be used after otp verification
+    dispatch(setSignupData(signupData))
+
+    // Send OTP to user for verification
+    dispatch(sendOtp(inputVal.email, navigate));
+
+    // Reset
+    setInputVal({
+      firstName: "",
+      lastName: "",
+      email: "",
+      username: "",
+      password: "",
+      passwordConfirm: "",
+      agreedToTerms: false,
+    });
+  };
+
   const tailFormItemLayout = {
     wrapperCol: {
       xs: {
@@ -76,7 +105,8 @@ const Signup = () => {
           <Form
             className={styles.form_container}
             form={form}
-            onFinish={handleSubmit}
+            // onFinish={handleSubmit}
+            onFinish={handleOnSubmit}
           >
             <h1>Create Account</h1>
             <Form.Item

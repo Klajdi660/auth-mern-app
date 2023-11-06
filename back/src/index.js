@@ -17,7 +17,7 @@ const corsOptions = {
 };
 
 app.use(cors(corsOptions));
-app.options("*", cors());
+// app.options("*", cors());
 app.use(cookieParser());
 app.disable("x-powered-by"); // less hackers know about our stack
 

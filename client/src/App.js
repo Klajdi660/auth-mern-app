@@ -9,6 +9,8 @@ import ForgotPassword from "./components/ForgotPassword";
 import Error from "./components/Error";
 import PasswordReset from "./components/PasswordReset/index.js";
 import VerifyOTP from "./components/OTPVerify";
+import { ToastContainer } from "react-toastify";
+import "react-toastify/dist/ReactToastify.css";
 
 const router = createBrowserRouter([
   {
@@ -48,6 +50,16 @@ const router = createBrowserRouter([
 const App = () => {
   return (
     <>
+      {/* config toastify */}
+      <ToastContainer
+        position="top-left"
+        autoClose={5000}
+        hideProgressBar={false}
+        newestOnTop={false}
+        closeOnClick
+        pauseOnFocusLoss
+        pauseOnHover
+      />
       <RouterProvider router={router}/>
     </>
   );
