@@ -18,14 +18,21 @@ const login = async (usernameOrEmail, password) => {
     const user = results[0];
 
     if (!user) {
-      return { error: true, message: "Invalid username/Email or Password!" };
+      return { 
+        status: 400,
+        error: true, 
+        message: "Invalid username/Email or Password!" 
+      };
     }
 
     const validPassword = await bcrypt.compare(password, user.password);
-    console.log('validPassword :>> ', validPassword);
 
     if (!validPassword) {
-      return { error: true, message: "Invalid username/Email or Password!" };
+      return { 
+        status: 400,
+        error: true, 
+        message: "Invalid username/Email or Password!" 
+      };
     }
 
     if (!user.verified) {
@@ -38,12 +45,14 @@ const login = async (usernameOrEmail, password) => {
        subject: subject
       });
   
-      return { error: true, message: `Email ${usernameOrEmail} not verified. A verification email has been sent. Please check your inbox.` };
+      return { 
+        status: 400,
+        error: true, 
+        message: `Email ${usernameOrEmail} not verified. A verification email has been sent. Please check your inbox.` 
+      };
     }
 
-    const id = user.id;
-
-    const token = jwt.sign({ id }, access_token_secret, {
+    const token = jwt.sign({ id: user.id }, access_token_secret, {
       expiresIn: jwt_expires_in
     });
 
@@ -58,10 +67,19 @@ const login = async (usernameOrEmail, password) => {
       cookieOptions
     };
 
-    return { error: false, message: "Logged in successfully", data: result };
+    return { 
+      status: 200,
+      error: false, 
+      message: "Logged in successfully", 
+      data: result 
+    };
   } catch (error) {
     console.error(`Error: ${error}`);
-    return { error: true, message: "Internal Server Error" };
+    return { 
+      status: 501, 
+      error: true, 
+      message: "Internal Server Error" 
+    };
   }
 };
 
