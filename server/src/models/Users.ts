@@ -1,5 +1,5 @@
 import { DataTypes, Model } from "sequelize";
-import { sequelizeConnection } from "../clients/db";
+import { sequelizeConnection } from "../clients/db/database";
 
 export class User extends Model {};
 

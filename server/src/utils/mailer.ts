@@ -2,7 +2,7 @@ import config from "config";
 import path from "path";
 import hbs from "nodemailer-express-handlebars";
 import { createTransport } from "nodemailer";
-import { smtpEmailTypesParams } from "../types/user.type";
+import { smtpEmailTypesParams } from "../types";
 
 const smtp = config.get<smtpEmailTypesParams>("mail");
 

@@ -5,12 +5,12 @@ import config from "config";
 const level = config.get<string>("logLevel");
 
 export const log = logger({
-    transport: {
-      target: "pino-pretty",
-    },
-    level,
-    base: {
-      pid: false,
-    },
-    timestamp: () => `,"time":"${dayjs().format()}"`,
+  transport: {
+    target: "pino-pretty",
+  },
+  level,
+  base: {
+    pid: false,
+  },
+  timestamp: () => `,"time":"${dayjs().format()}"`,
 });

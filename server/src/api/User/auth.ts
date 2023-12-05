@@ -1,15 +1,12 @@
 import { Op } from "sequelize";
 import config from "config";
 import crypto from "crypto";
-import jwt from "jsonwebtoken";
 import dayjs from "dayjs";
 import utc from "dayjs/plugin/utc";
 import otpGenerator from "otp-generator";
-import { OtpSettings, UserTypesParams } from "../../types/user.type";
-import { User } from "../../models/Users";
-import { OTP } from "../../models/OTP";
-import { log, sendEmail, signAccessJWT, signRefereshToken } from "../../utils";
-import { Session } from "../../models/Session";
+import { OtpSettings, UserTypesParams } from "../../types";
+import { User, OTP, Session } from "../../models";
+import { log, sendEmail, signAccessJWT } from "../../utils";
 
 const { otpLength, otpConfig } = config.get<OtpSettings>("otp");
 
@@ -17,7 +14,7 @@ const getUserByEmail = async (email: string) => {
     return User.findOne({
         where: { email }
     }).catch((error) => {
-        log.error(`Error: ${error}`)
+        log.error(`[User]: ${JSON.stringify({ action: "getUserByEmail catch", data: error })}`);
     })
 };
 
@@ -27,7 +24,7 @@ const getUserByEmailOrUsername = async (email: string, username: string) => {
             [Op.or]: [{ email }, { username }]
         }
     }).catch((error) => {
-        log.error(`Error: ${error}`);
+        log.error(`[User]: ${JSON.stringify({ action: "getUserByEmailOrUsername catch", data: error })}`);
     })
 };
 
@@ -45,7 +42,7 @@ const createUser = async (data: UserTypesParams, hashedPassword: string) => {
     const saveUser = await newUser
         .save()
         .catch((error) => {
-            log.error(`Error: ${error}`);
+            log.error(`[User]: ${JSON.stringify({ action: "createUser catch", data: error })}`);
         });
     return saveUser;
 };
@@ -60,7 +57,7 @@ const generateUniqueOTP = async (): Promise<string> => {
             where: { otp }
         })
         .catch((error) => {
-            console.error(`Error: ${error}`)
+            log.error(`[User]: ${JSON.stringify({ action: "OTP catch", data: error })}`);
         });
 
     if (result) {
@@ -77,6 +74,7 @@ export const sendOTPCodeHandler = async (email: string, firstName: string, lastN
     const existingUser: any = await getUserByEmail(email);
 
     if (existingUser) {
+        log.info(`[User]: ${JSON.stringify({ action: "sendOTPCode existingUser", data: existingUser })}`);
         return { error: true, message: "User already exists. Please sign in to continue." };
     }
 
@@ -99,6 +97,7 @@ export const sendOTPCodeHandler = async (email: string, firstName: string, lastN
     log.info(`Otp Body: ${JSON.stringify(otpBody)}`);
 
     if (!otpBody) {
+        log.info(`[User]: ${JSON.stringify({ action: "OTP Req", data: otpBody })}`);
         return { error: true, message: "Something went wrong!" };
     }
 
@@ -117,6 +116,7 @@ export const createUserHandler = async (data: UserTypesParams) => {
     const existingUser: any = await getUserByEmailOrUsername(email, username);
 
     if (existingUser) {
+        log.info(`[User]: ${JSON.stringify({ action: "createUser existingUser", data: existingUser })}`);
         if (existingUser.email === email && existingUser.username === username) {
             return { error: true, message: "Email and username already exist" };
         } else if (existingUser.email === email) {
@@ -150,7 +150,7 @@ export const createUserHandler = async (data: UserTypesParams) => {
     const timeDifferenceMinutes = expiresAtTimestamp.diff(currentTimestamp, 'seconds');
 
     if (timeDifferenceMinutes <= 0) {
-        log.error('Your OTP has expired.');
+        log.error(`[User]: ${JSON.stringify({ action: "expired User", data: timeDifferenceMinutes })}`);
         return { error: true, message: "Your OTP code has expired. Please request a new OTP code." };
     }
 
@@ -189,4 +189,7 @@ export const createSessionHandler = async (usernameOrEmail: string, password: st
     // create a refresh token 
     // const refreshToken = await signRefereshToken({ userId: user.id });
     // console.log('refreshToken :>> ', refreshToken);
+    return {
+        rToken: accessToken,
+    }
 };

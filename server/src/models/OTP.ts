@@ -1,5 +1,5 @@
 import { DataTypes, Model, literal, Sequelize } from "sequelize";
-import { sequelizeConnection } from "../clients/db";
+import { sequelizeConnection } from "../clients/db/database";
 
 export class OTP extends Model {};
 

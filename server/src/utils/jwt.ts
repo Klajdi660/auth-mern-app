@@ -1,6 +1,6 @@
 import config from "config";
 import jwt from "jsonwebtoken";
-import { UserTypesParams } from "../types/user.type";
+import { UserTypesParams } from "../types";
 import { createSession } from "../api/User/auth";
 
 const signJWT = (

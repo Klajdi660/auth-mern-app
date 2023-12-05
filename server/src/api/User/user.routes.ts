@@ -1,7 +1,7 @@
 import { Request, Response, Router } from "express";
 import { asyncHandler } from "../../utils";
-import validateResource from "../../middleware/validateResource";
-import { createUserSchema, createSessionSchema, otpCodeSchema } from "../../schema/user.schema";
+import { validateResource } from "../../middleware";
+import { createUserSchema, createSessionSchema, otpCodeSchema } from "../../schema";
 import { createSessionHandler, createUserHandler, sendOTPCodeHandler } from "./auth";
 
 const userRoutes = Router();

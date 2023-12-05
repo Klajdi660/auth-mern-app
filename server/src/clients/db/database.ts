@@ -1,18 +1,14 @@
 import config from "config";
 import { Sequelize } from "sequelize";
 import { log } from "../../utils/logger";
+import { MysqlParams } from "../../types";
 
 const { 
     host: dbHost, 
     user: dbUser, 
     password: dbPassword, 
     database: dbName 
-} = config.get<{
-    host: string,
-    user: string,
-    password: string,
-    database: string
-}>("mysql");
+} = config.get<MysqlParams>("mysql");
 
 const dbDriver = "mysql";
 
@@ -31,9 +27,9 @@ const sequelizeConnection = new Sequelize(dbName, dbUser, dbPassword, {
 const connectToDb = async () => {
     try {
         await sequelizeConnection.authenticate();
-        log.info("[db]: Successfully connected to database");
+        log.info(`[database]: ${JSON.stringify({ action: "Database Conn", messsage: "Successfully connected to database" })}`);
     } catch (error) {
-        log.error(`Failed to connect to database: ${error}`);
+        log.error(`[database]: ${JSON.stringify({ action: "Database Conn Catch", messsage: "Failed to connect to databaser", data: error })}`);
         return error;
     }
 };

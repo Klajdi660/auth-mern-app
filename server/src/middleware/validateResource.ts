@@ -2,7 +2,7 @@ import { Request, Response, NextFunction } from "express";
 import { AnyZodObject } from "zod";
 import { log } from "../utils";
 
-const validateResource = (schema: AnyZodObject) => (
+export const validateResource = (schema: AnyZodObject) => (
     req: Request,
     res: Response,
     next: NextFunction
@@ -15,8 +15,7 @@ const validateResource = (schema: AnyZodObject) => (
         });
         next();
     } catch (e: any) {
-        log.error(`[Error]: ${JSON.stringify(e.errors)}`);
-        
+        log.error(`[validateResource]: ${JSON.stringify({ action: "validateResource catch", data: e.errors })}`);
         return res
             .status(400)
             .json({
@@ -25,5 +24,3 @@ const validateResource = (schema: AnyZodObject) => (
             })
     }
 };
-
-export default validateResource;

@@ -1,7 +1,7 @@
 import { Request, Response, NextFunction } from "express";
 import { verifyJWT } from "../utils";
 
-const deserializeUser = async (
+export const deserializeUser = async (
     req: Request,
     res: Response,
     next: NextFunction
@@ -26,5 +26,3 @@ const deserializeUser = async (
 
     return next();
 };
-
-export default deserializeUser;

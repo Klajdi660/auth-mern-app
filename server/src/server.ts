@@ -3,13 +3,14 @@ import express, { Express } from "express";
 import config from "config";
 import cors from "cors";
 import cookieParser from "cookie-parser";
-import { connectToDb } from "./clients/db";
-import { log } from "./utils/logger";
+import { connectToDb } from "./clients";
+import { log } from "./utils";
 import routes from "./routes";
-import deserializeUser from "./middleware/deserializeUser";
+import { deserializeUser } from "./middleware";
+import { AppParams, CorsParams } from "./types";
 
-const { port, prefix } = config.get<{ port: number, prefix: string }>("app");
-const { cors_url } = config.get<{ cors_url: string }>("cors");
+const { port, prefix } = config.get<AppParams>("app");
+const { cors_url } = config.get<CorsParams>("cors");
 
 const app: Express = express();
 
@@ -38,13 +39,13 @@ const startServer = async () => {
     try {
         await connectToDb();
         app.listen(port, () => { 
-            log.info(`[server]: Server is running at http://localhost:${port}`);
+            log.info(`[server]: ${JSON.stringify({ action: "Server Run", messsage: `Server is running at http://localhost:${port}` })}`);
         });
     } catch (error) {
-        log.error(`Cannot connect to the server: ${error}`);
+        log.error(`[server]: ${JSON.stringify({ action: "Server Catch", messsage: "Cannot connect to the server", data: error })}`);
     }
 };
 
 startServer().catch((error) => {
-    log.error(`Invalid database connection: ${error}`);
+    log.error(`[database]: ${JSON.stringify({ action: "Database Catch", messsage: "Invalid database connection", data: error })}`);
 });
