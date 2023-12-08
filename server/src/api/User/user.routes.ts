@@ -2,7 +2,7 @@ import { Request, Response, Router } from "express";
 import { asyncHandler } from "../../utils";
 import { validateResource } from "../../middleware";
 import { createUserSchema, createSessionSchema, otpCodeSchema } from "../../schema";
-import { createSessionHandler, createUserHandler, sendOTPCodeHandler } from "./auth";
+import { createSessionHandler, registerUserHandler, confirmUserHandler } from "./auth";
 
 const userRoutes = Router();
 
@@ -17,25 +17,27 @@ userRoutes.post(
     })
 );
 
-// Route for sending OTP code to the user's email
-userRoutes.post(
-    "/sendotp",
-    validateResource(otpCodeSchema),
-    asyncHandler(async (req: Request, res: Response) => {
-        const { email, firstName, lastName } = req.body;
-        const response = await sendOTPCodeHandler(email, firstName, lastName);
-        res.json(response);
-    })
-);
-
-// Route for creating user 
+// Route for register user 
 userRoutes.post(
     "/register",
     validateResource(createUserSchema),
     asyncHandler(async (req: Request, res: Response) => {   
-        const response = await createUserHandler(req.body);
+        const { email, username } = req.body;
+        const response = await registerUserHandler(req.body, email, username);
         res.json(response);
     })
 );
+
+// Route for sending OTP code to the user's email
+userRoutes.post(
+    "/confirm",
+    validateResource(otpCodeSchema),
+    asyncHandler(async (req: Request, res: Response) => {
+        const { code, email } = req.body;
+        const response = await confirmUserHandler(code, email);
+        res.json(response);
+    })
+);
+
 
 export default userRoutes;

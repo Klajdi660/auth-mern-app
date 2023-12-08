@@ -6,7 +6,8 @@ export interface UserTypesParams {
     password: string;
     passwordConfirm: string;
     agreedToTerms: boolean;
-    otpCode: number
+    otpCode?: string;
+    expiredCodeAt?: any;
 };
 
 export interface smtpEmailTypesParams {

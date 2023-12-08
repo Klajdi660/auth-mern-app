@@ -15,22 +15,20 @@ User.init(
             allowNull: false,
             unique: true
         },
-        password: {
-            type: DataTypes.STRING,
+        extra: {
+            type: DataTypes.TEXT,
             allowNull: false
         },
-        firstName: {
-            type: DataTypes.STRING,
+        createdAt: {
+            type: DataTypes.DATE,
+            defaultValue: DataTypes.NOW,
             allowNull: false
         },
-        lastName: {
-            type: DataTypes.STRING,
+        updatedAt: {
+            type: DataTypes.DATE,
+            defaultValue: DataTypes.NOW,
             allowNull: false
         },
-        token: {
-            type: DataTypes.STRING,
-            allowNull: true
-        }  
     },
     {
        sequelize: sequelizeConnection,

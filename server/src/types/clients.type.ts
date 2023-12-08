@@ -5,3 +5,8 @@ export interface MysqlParams {
     password: string;
     database: string;
 }
+
+export interface RedisParams {
+    host: string;
+    port: number;
+}

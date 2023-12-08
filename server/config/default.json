@@ -20,19 +20,23 @@
         "password": "Klajdi1996",
         "database": "node-registration"
     },
+    "redis_feed": {
+        "host": "127.0.01",
+        "port": 6379
+    },
     "mail": {
         "service": "gmail",
         "host": "smtp.gmail.com",
         "port": 587,
         "secure": false,
         "email": "klajdixhafkollari36@gmail.com",
-        "password": "qejogblzqwvvimac"
+        "password": "nyekejfpjnjshevt"
     },
     "otp": {
         "otpLength": 6,
         "otpConfig": {
             "lowerCaseAlphabets": false,
-            "upperCaseAlphabets": false,
+            "upperCaseAlphabets": true,
             "specialChars": false
         }
     }  

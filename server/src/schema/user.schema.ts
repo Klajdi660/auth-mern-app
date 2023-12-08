@@ -54,9 +54,9 @@ export const createUserSchema = object({
         }, {
             message: "You must agree to the terms and conditions to register"
         }),
-        otpCode: number({
-            required_error: "OTP code is required"
-        })
+        // otpCode: number({
+        //     required_error: "OTP code is required"
+        // })
     }).refine((data) => data.password === data.passwordConfirm, {
         message: "Passwords do not match",
         path: ["passwordConfirmation"],
@@ -76,9 +76,10 @@ export const createSessionSchema = object({
 
 export const otpCodeSchema = object({
     body: object({
-        email: string({
-            required_error: "Email is required",
-        }).regex(emailRegex, "Not a valid email"),
+        code: string({
+            required_error: "OTP code is required",
+        }),
+        email: string(),
     }),
 });
 
