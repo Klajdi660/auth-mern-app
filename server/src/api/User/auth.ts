@@ -61,6 +61,8 @@ const generateUniqueOTP = async (): Promise<string> => {
 
 // Service for register user
 export const registerUserHandler = async (data: UserTypesParams, email: string, username: string) => {
+    // rechapta
+    
     // agreed to terms
     if (!data.agreedToTerms) {
         return { error: true, message: "You must agree to the terms and conditions to register." };
