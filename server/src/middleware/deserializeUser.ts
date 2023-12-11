@@ -10,17 +10,14 @@ export const deserializeUser = async (
         /^Bearer\s/,
         ""
     );
-    console.log('accessToken VV:>> ', accessToken);
 
     if (!accessToken) {
-        console.log("HYRIIIIIIII 111111")
         return next();
     }
-    console.log("HYRIIIII 22222")
+
     const decoded = verifyJWT(accessToken, "accessTokenPublicKey");
-    console.log('decoded :>> ', decoded);
+
     if (decoded) {
-        console.log("HYRIIIIII 333333")
         res.locals.user = decoded;
     }
 

@@ -13,9 +13,11 @@ export const validateResource = (schema: AnyZodObject) => (
             query: req.query,
             params: req.params
         });
+        
         next();
     } catch (e: any) {
         log.error(`[validateResource]: ${JSON.stringify({ action: "validateResource catch", data: e.errors })}`);
+       
         return res
             .status(400)
             .json({
