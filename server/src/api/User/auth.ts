@@ -61,6 +61,11 @@ const generateUniqueOTP = async (): Promise<string> => {
 
 // Service for register user
 export const registerUserHandler = async (data: UserTypesParams, email: string, username: string) => {
+    // agreed to terms
+    if (!data.agreedToTerms) {
+        return { error: true, message: "You must agree to the terms and conditions to register." };
+    }
+
     // check user in database
     const existingUser: any = await getUserByEmailOrUsername(email, username);
 
