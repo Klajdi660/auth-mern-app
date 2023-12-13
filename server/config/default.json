@@ -9,7 +9,8 @@
     "logLevel": "info",
     "token": {
         "access_token_secret": "Klajdi96@",
-        "jwt_expires_in": "15m",
+        "accessTokenExpiresIn": 15,
+        "refreshTokenExpiresIn": 59,
         "jwt_cookie_expires": "2d"
     },
     "mysql": {

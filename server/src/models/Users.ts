@@ -15,6 +15,10 @@ User.init(
             allowNull: false,
             unique: true
         },
+        hash: {
+            type: DataTypes.STRING,
+            allowNull: false,
+        },
         extra: {
             type: DataTypes.TEXT,
             allowNull: false
@@ -26,8 +30,8 @@ User.init(
         },
         updatedAt: {
             type: DataTypes.DATE,
-            defaultValue: DataTypes.NOW,
-            allowNull: false
+            // defaultValue: DataTypes.NOW,
+            allowNull: true
         },
     },
     {
