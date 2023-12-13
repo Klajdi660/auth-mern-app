@@ -44,9 +44,10 @@ authRouter.post(
     })
 );
 
-authRouter.post(
-    "logout",
+authRouter.get(
+    "/logout",
     asyncHandler(async (req: Request, res: Response) => {
+        console.log('res.locals :>> ', res.locals);
         const user = res.locals.user;
         const response = await logoutHandler(user);
 
