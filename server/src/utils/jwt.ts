@@ -3,9 +3,6 @@ import jwt from "jsonwebtoken";
 import { redisCLI } from "../clients";
 import { log } from "./logger";
 
-// import { UserTypesParams } from "../types";
-// import { createSession } from "../api/User/auth";
-
 const { accessTokenExpiresIn, refreshTokenExpiresIn }= config.get<any>("token");
 
 const signJWT = (
@@ -41,9 +38,9 @@ export const signToken = async (user: any) => {
     });
 
     // Create a Session
-    await redisCLI.setnx(user.id.toString(), JSON.stringify(user));
-    await redisCLI.expire(user.id.toString(), 3600);
-
+    await redisCLI.setnx(`session_${user.id}`, JSON.stringify(user));
+    await redisCLI.expire(`session_${user.id}`, 3600);
+    
     return { access_token, refresh_token };
 };
 
@@ -54,28 +51,11 @@ export const verifyJWT = (token: string, key: string) => {
             "base64"
         ).toString("ascii");
 
-        return jwt.verify(token, publicKey);
+        const decoded = jwt.verify(token, publicKey);
+        
+        return decoded;
     } catch (error) {
         log.error(`[verifyJWT]: ${JSON.stringify({ action: "verifyJWT catch", data: error })}`);
         return null;
     }
 };
-
-// export const verifyJWT = <T>(
-//     token: string,
-//     keyName: "accessTokenPublicKey" | "refreshTokenPublicKey"
-// ): T | null => {
-//     const publicKey = Buffer
-//         .from(
-//             config.get<string>(keyName),
-//             "base64"
-//         )
-//         .toString("ascii");
-    
-//     try {
-//         const decoded = jwt.verify(token, publicKey) as T;
-//         return decoded;
-//     } catch (e) {
-//         return null;
-//     }
-// };

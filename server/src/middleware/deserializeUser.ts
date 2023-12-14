@@ -53,21 +53,4 @@ export const deserializeUser = async (
         log.error(`[deserializeUser]: ${JSON.stringify({ action: "deserializeUser catch", data: error })}`);
         return error;
     }
-    
-    // const accessToken = (req.headers.authorization || "").replace(
-    //     /^Bearer\s/,
-    //     ""
-    // );
-
-    // if (!accessToken) {
-    //     return next();
-    // }
-
-    // const decoded = verifyJWT(accessToken, "accessTokenPublicKey");
-
-    // if (decoded) {
-    //     res.locals.user = decoded;
-    // }
-
-    // return next();
 };
